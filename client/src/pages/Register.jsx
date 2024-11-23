@@ -4,30 +4,35 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 function Register() {
-    const [username, setUsername] = useState("");
+    const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const registerUser = (e)=>{
+    const handleRegister = async (e) => {
         e.preventDefault();
-        axios.post("/register",{
-            username , 
-            email ,
-            password
-        })
+        try {
+            await axios.post("/register", {
+                name,
+                email,
+                password
+            });
+            alert('Registration successful. Now you can login.');
+        } catch (error) {
+            alert("Registration failed. Please try again later.");
+        }
     }
     return (
         <div className="mt-4 flex items-center grow justify-around">
             <div className="mb-64">
                 <h1 className=" text-3xl text-center mb-10">Register</h1>
-                <form action="" className="max-w-md mx-auto"onSubmit={registerUser} >
+                <form action="" className="max-w-md mx-auto" onSubmit={handleRegister} >
                     <input
                         className="w-full border border-gray-400 rounded-2xl py-2 px-3 my-1"
                         type="text"
                         placeholder="username"
-                        value={username}
+                        value={name}
                         onChange={(e) => {
-                            setUsername(e.target.value);
+                            setName(e.target.value);
                         }}
                     />
                     <input

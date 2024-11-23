@@ -1,17 +1,18 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 const port = 3000;
 require("dotenv").config();
-
+const User = require("./models/user");
 
 
 mongoose.connect(process.env.MONGO_URL)
-.then(() => console.log("DB Connected"))
-.catch((err) => console.log(err));
+    .then(() => console.log("DB Connected"))
+    .catch((err) => console.log(err));
 
 
-
+const bcryptSalt = bcrypt.genSaltSync(12);
 const app = express();
 app.use(express.json());
 app.use(cors({
@@ -19,11 +20,37 @@ app.use(cors({
     origin: "http://localhost:5173",
 }));
 
-app.post("/register", (req, res) => {
-    const { username, email, password } = req.body;
-
-    res.json({ username, email, password });
+app.post("/register", async (req, res) => {
+    try {
+        const { name, email, password } = req.body;
+        const user = await User.create({
+            name,
+            email,
+            password: bcrypt.hashSync(password, bcryptSalt),
+        })
+        res.json(user);
+    } catch (err) {
+        res.status(422).json(err);
+    }
+})
+app.post("/login", async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
+        const passOK = bcrypt.compareSync(password, user.password);
+        if (passOK) {
+            if (passOK) {
+                res.json('pass ok');
+            } else {
+                res.status(422).json('pass not ok');
+            }
+        } else {
+            res.json('user not found');
+        }
+    } catch (err) {
+        res.status(422).json(err);
+    }
 })
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`)
+    console.log(`Server is running on http://localhost:${port}`);
 })  
