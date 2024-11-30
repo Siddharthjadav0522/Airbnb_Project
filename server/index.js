@@ -1,9 +1,10 @@
 const express = require("express");
 const cors = require("cors");
+const port = 4000;
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const port = 3000;
+const cookieParser = require("cookie-parser");
 require("dotenv").config();
 const User = require("./models/user");
 
@@ -13,7 +14,9 @@ mongoose.connect(process.env.MONGO_URL)
     .catch((err) => console.log(err));
 
 const app = express();
+
 app.use(express.json());
+app.use(cookieParser());
 app.use(cors({
     credentials: true,
     origin: "http://localhost:5173",
@@ -34,28 +37,52 @@ app.post("/register", async (req, res) => {
     } catch (err) {
         res.status(422).json(err);
     }
-})
+});
+
 app.post("/login", async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        const user = await User.findOne({ email });
+
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (user) {
         const passOK = bcrypt.compareSync(password, user.password);
         if (passOK) {
-            if (passOK) {
-                jwt.sign({ email: user.email, id: user._id }, jwtSecret, {}, (err, token) => {
-                    if (err) throw err;
-                    res.cookie('token', token).json('pass ok');
-                })
-            } else {
-                res.status(422).json('pass not ok');
-            }
+            jwt.sign({
+                email: user.email,
+                id: user._id,
+                name: user.name,
+            }, jwtSecret, {}, (err, token) => {
+                if (err) throw err;
+                res.cookie('token', token).json(user);
+                console.log(token);
+            });
         } else {
-            res.json('user not found');
+            res.status(422).json('pass not ok');
         }
-    } catch (err) {
-        res.status(422).json(err);
     }
-})
+    else {
+        res.json('user not found');
+    }
+});
+
+app.get("/profile", (req, res) => {
+    const { token } = req.cookies;
+    if (token) {
+        jwt.verify(token, jwtSecret, {}, async(err, user) => {
+            if (err) throw err;
+            // const user = await User.findById(user._id); or
+            // const {name,email,_id} = await User.findById(user._id);
+            // res.json(name,email,_id); or
+            res.json(user);
+        })
+    } else { 
+        res.json(null)
+    }
+});
+
+app.post("/logout", (req, res) => {
+    res.cookie("token",'').json(true);    
+});
+
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
 })   
