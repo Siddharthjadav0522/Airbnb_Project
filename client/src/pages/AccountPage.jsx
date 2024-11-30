@@ -60,7 +60,7 @@ function AccountPage() {
 
             {subpage === 'profile' && (
                 <div className='text-center max-w-lg mx-auto'>
-                    Loggin in as user.name {user.name} user.email ({user.email}) <br />
+                    Loggin in as {user.name} ({user.email}) <br />
                     <button onClick={logout} className='bg-primary text-white w-full p-2 rounded-2xl max-w-sm mt-2'>Logout</button>
                 </div>
             )}

@@ -4,6 +4,8 @@ import { UserContext } from './UserContext'
 
 function Header() {
     const { user } = useContext(UserContext)
+    // console.log(user);
+    
     return (
         <>
             <header className='flex justify-between items-center flex-wrap'>
@@ -23,7 +25,7 @@ function Header() {
                     </button>
                 </div>
 
-                <Link to={user?'/login':'/account'} className='flex gap-3 border border-gray-300 rounded-full py-2 px-4 items-center'>
+                <Link to={user?'/account':'/login'} className='flex gap-3 border border-gray-300 rounded-full py-2 px-4 items-center'>
                     <i className="fa-solid fa-bars text-gray-700"></i>
                     <div className='bg-gray-500 text-white rounded-full w-8 h-8 flex items-center justify-center'>
                         <i className="fa-solid fa-user"></i>

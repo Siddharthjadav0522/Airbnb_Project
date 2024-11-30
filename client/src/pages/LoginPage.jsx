@@ -22,13 +22,6 @@ function LoginPage() {
         }
     };
 
-    // const token = "asdfasdf"
-    // {
-    //     headers: {
-    //         Authorization: `Bearer ${token}`, // Pass token here
-    //     },
-    // }
-
     if (redirect) {
         return <Navigate to={"/"} />;
     }
