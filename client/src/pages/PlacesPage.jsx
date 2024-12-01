@@ -45,40 +45,37 @@ function PlacesPage() {
                         <label className='text-xl inline-block mt-4'>Perks</label>
                         <p className='text-gray-500 text-sm'>select all the perks of your place</p>
                         <div>
-                            <lable>
-                                <input type="text" type='checkbox' />
+                            <label>
+                                <input type="checkbox" />
                                 <i className="fa-solid fa-wifi"></i>
                                 <span>wifi</span>
-                            </lable>
-                            <lable>
-                                <input type="text" type='checkbox' />
+                            </label>
+                            <label>
+                                <input type="checkbox" />
                                 <i className="fa-solid fa-car-side"></i>
-                                <span>Free parking spot </span>
-                            </lable>
-                            <lable>
-                                <input type="text" type='checkbox' />
+                                <span>Free parking spot</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" />
                                 <i className="fa-solid fa-tv"></i>
                                 <span>TV</span>
-                            </lable>
-                            <lable>
-                                <input type="text" type='checkbox' />
+                            </label>
+                            <label>
+                                <input type="checkbox" />
                                 <i className="fa-solid fa-radio"></i>
                                 <span>Radio</span>
-                            </lable>
-                            <lable>
-                                <input type="text" type='checkbox' />
+                            </label>
+                            <label>
+                                <input type="checkbox" />
                                 <i className="fa-solid fa-paw"></i>
                                 <span>Pets</span>
-                            </lable>
-                            <lable>
-                                <input type="text" type='checkbox' />
+                            </label>
+                            <label>
+                                <input type="checkbox" />
                                 <i className="fa-solid fa-shield-halved"></i>
                                 <span>Private entrance</span>
-                            </lable>
+                            </label>
                         </div>
-
-
-
 
                     </form>
                 </div>

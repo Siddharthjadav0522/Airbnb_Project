@@ -17,11 +17,12 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser());
 app.use(cors({
     credentials: true,
     origin: "http://localhost:5173",
 }));
+app.use(cookieParser());
+
 
 // const bcryptSalt = bcrypt.genSaltSync(12);
 // const jwtSecret = 'mysecretkey';
@@ -64,54 +65,40 @@ app.post("/register", async (req, res) => {
 
 app.post("/login", async (req, res) => {
 
-    // const { email, password } = req.body;
-    // const user = await User.findOne({ email });
-    // if (user) {
-    //     const passOK = bcrypt.compareSync(password, user.password);
-    //     if (passOK) {
-    //         jwt.sign({
-    //             email: user.email,
-    //             id: user._id,
-    //             name: user.name,
-    //         }, jwtSecret, {}, (err, token) => {
-    //             if (err) throw err;
-    //             res.cookie('token', token).json(user);
-    //             console.log(token);
-    //         });
-    //     } else {
-    //         res.status(422).json('pass not ok');
-    //     }
-    // }
-    // else {
-    //     res.json('user not found');
-    // }
-
     try {
         let { email, password } = req.body;
         let user = await User.findOne({ email });
+
         if (!user) {
-            return res.send("Email or Password incorrect")
+            return res.json({ message: "Email or Password incorrect" })
         }
         const passOK = await bcrypt.compare(password, user.password);
         if (!passOK) {
             return res.status(422).json({ message: "Email or Password incorrect", success: false });
         }
-        const jwtToken = jwt.sign(
+        let token = jwt.sign(
             { email: user.email, name: user.name, id: user._id },
             process.env.JWT_SECRET,
             { expiresIn: "24h" }
         );
-        console.log(jwtToken)
-        res.status(200).cookie("token", jwtToken).json({
-            message: "Login Successfull",
+
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+            maxAge: 24 * 60 * 60 * 1000,
+        });
+
+        res.status(200).json({
+            message: "Login Successful",
             success: true,
-            jwtToken,
+            token,
             email,
             name: user.name,
         })
 
-    } catch (error) {
-        console.error(err.massage);
+    } catch (err) {
+        console.error(err);
         res.status(500).json({
             message: "Internal Server Error",
             success: false
@@ -120,24 +107,20 @@ app.post("/login", async (req, res) => {
 
 });
 
-app.get("/profile", (req, res) => {
-    const token = req.headers.cookie;
-    // console.log(token);
-    
-    
-    if (token) {
-        jwt.verify(token, process.env.JWT_SECRET, {}, async (err, user) => {
-            // if (err) throw err;
-            console.log(user);
-            
-            // const user = await User.findById(user._id); 
-            // const {name,email,_id} = await User.findById(user._id);
-            // res.json(name,email,_id); 
-            // res.json(user);
-            res.json("user");
-        })
-    } else {
-        res.json(null)
+app.get("/profile", async (req, res) => {
+    const token = req.cookies.token;
+    if (!token) {
+        return res.status(401).json({ message: "No token provided" });
+    }
+    try {
+        let decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const user = await User.findById(decoded.id);
+        let { name, email, _id } = user;
+        res.json({ name, email, _id });
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Server error" });
     }
 });
 
