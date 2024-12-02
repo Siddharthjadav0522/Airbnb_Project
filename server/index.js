@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
+const imageDownloader = require("image-downloader")
 require("dotenv").config();
 const User = require("./models/user");
 
@@ -108,11 +109,11 @@ app.post("/login", async (req, res) => {
 });
 
 app.get("/profile", async (req, res) => {
-    const token = req.cookies.token;
+    const token = req.cookies.token; 
     if (!token) {
         return res.status(401).json({ message: "No token provided" });
     }
-    try {
+    try { 
         let decoded = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findById(decoded.id);
         let { name, email, _id } = user;
@@ -127,6 +128,17 @@ app.get("/profile", async (req, res) => {
 app.post("/logout", (req, res) => {
     res.cookie("token", '').json(true);
 });
+
+app.post("/upload-by-link",async (req, res) => {
+   const {link} = req.body;
+  await imageDownloader.image({  
+    url: link,
+    path: __dirname + './uploads',
+
+   })
+});
+
+
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);

@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom'
 import { UserContext } from './UserContext'
 
 function Header() {
-    const { user } = useContext(UserContext)
-    console.log(user);
+    const { user } = useContext(UserContext);
 
     return (
         <>
