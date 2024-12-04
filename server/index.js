@@ -1,84 +1,94 @@
 const express = require("express");
 const cors = require("cors");
-const port = 4000;
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
-const imageDownloader = require("image-downloader")
+const imageDownloader = require("image-downloader");
+const multer = require("multer");
+const fs = require("fs");
 require("dotenv").config();
+
 const User = require("./models/user");
-
-
-mongoose.connect(process.env.MONGO_URL)
-    .then(() => console.log("DB Connected"))
-    .catch((err) => console.log(err));
+const Place = require("./models/place");
 
 const app = express();
+const port = 4000;
 
+
+mongoose
+    .connect(process.env.MONGO_URL)
+    .then(() => console.log("DB Connected"))
+    .catch((err) => console.error("DB Connection Error:", err));
+
+// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({
-    credentials: true,
-    origin: "http://localhost:5173",
-}));
+app.use("/uploads", express.static(__dirname + "/uploads"));
+app.use(
+    cors({
+        credentials: true,
+        origin: "http://localhost:5173",
+    })
+);
 app.use(cookieParser());
 
+const authenticate = async (req, res, next) => {
+    const token = req.cookies.token;
+    if (!token) {
+        return res.status(401).json({ message: "Unauthorized: No token provided" });
+    }
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        req.user = await User.findById(decoded.id);
+        if (!req.user) {
+            return res.status(401).json({ message: "Unauthorized: User not found" });
+        }
+        next();
+    } catch (err) {
+        console.error("Authentication Error:", err.message);
+        res.status(401).json({ message: "Unauthorized: Invalid token" });
+    }
+};
 
-// const bcryptSalt = bcrypt.genSaltSync(12);
-// const jwtSecret = 'mysecretkey';
 
 app.post("/register", async (req, res) => {
     try {
-        let { name, email, password } = req.body;
-        let user = await User.findOne({ email });
-        if (user) {
-            return res.status(401).json({ message: "You already have an account, please login.", success: false })
+        const { name, email, password } = req.body;
+        const existingUser = await User.findOne({ email });
+
+        if (existingUser) {
+            return res.status(401).json({ message: "You already have an account. Please login.", success: false });
         }
 
-        bcrypt.genSalt(12, (err, salt) => {
-            bcrypt.hash(password, salt, async (err, hash) => {
-                if (err) {
-                    return res.json(err.message);
-                } else {
-                    let user = await User.create({
-                        name,
-                        email,
-                        password: hash,
-                    })
+        const salt = await bcrypt.genSalt(12);
+        const hashedPassword = await bcrypt.hash(password, salt);
 
-                    res.status(201).json({
-                        massage: "user created successfully",
-                        success: true
-                    })
-                }
-            })
-        })
-
+        await User.create({ name, email, password: hashedPassword });
+        res.status(201).json({ message: "User created successfully", success: true });
     } catch (err) {
-        console.error(err);
-        res.status(422).json({
-            message: "Internal sarver error",
-            success: false,
-        })
+        console.error("Registration Error:", err.message);
+        res.status(500).json({ message: "Internal server error", success: false });
     }
 });
 
-app.post("/login", async (req, res) => {
 
+app.post("/login", async (req, res) => {
     try {
-        let { email, password } = req.body;
-        let user = await User.findOne({ email });
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
 
         if (!user) {
-            return res.json({ message: "Email or Password incorrect" })
+            return res.status(401).json({ message: "Invalid email or password", success: false });
         }
-        const passOK = await bcrypt.compare(password, user.password);
-        if (!passOK) {
-            return res.status(422).json({ message: "Email or Password incorrect", success: false });
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(401).json({ message: "Invalid email or password", success: false });
         }
-        let token = jwt.sign(
-            { email: user.email, name: user.name, id: user._id },
+
+        const token = jwt.sign(
+            { id: user._id, email: user.email, name: user.name },
             process.env.JWT_SECRET,
             { expiresIn: "24h" }
         );
@@ -87,59 +97,84 @@ app.post("/login", async (req, res) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
-            maxAge: 24 * 60 * 60 * 1000,
         });
 
         res.status(200).json({
-            message: "Login Successful",
+            message: "Login successful",
             success: true,
             token,
-            email,
+            email: user.email,
             name: user.name,
-        })
-
+        });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({
-            message: "Internal Server Error",
-            success: false
-        })
-    }
-
-});
-
-app.get("/profile", async (req, res) => {
-    const token = req.cookies.token; 
-    if (!token) {
-        return res.status(401).json({ message: "No token provided" });
-    }
-    try { 
-        let decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const user = await User.findById(decoded.id);
-        let { name, email, _id } = user;
-        res.json({ name, email, _id });
-    }
-    catch (err) {
-        console.error(err);
-        res.status(500).json({ message: "Server error" });
+        console.error("Login Error:", err.message);
+        res.status(500).json({ message: "Internal server error", success: false });
     }
 });
+
+
+app.get("/profile", authenticate, (req, res) => {
+    const { name, email, _id } = req.user;
+    res.json({ name, email, _id });
+});
+
 
 app.post("/logout", (req, res) => {
-    res.cookie("token", '').json(true);
+    res.cookie("token", "", { httpOnly: true, secure: false, sameSite: "strict" });
+    res.status(200).json({ message: "Logged out successfully", success: true });
 });
 
-app.post("/upload-by-link",async (req, res) => {
-   const {link} = req.body;
-  await imageDownloader.image({  
-    url: link,
-    path: __dirname + './uploads',
 
-   })
+app.post("/upload-by-link", async (req, res) => {
+    try {
+        const { link } = req.body;
+        const newName = "Photo" + Date.now() + ".jpg";
+        const filePath = __dirname + "/uploads/" + newName;
+
+        await imageDownloader.image({ url: link, dest: filePath });
+        res.status(200).json({ filename: newName });
+    } catch (err) {
+        console.error("Error downloading image:", err.message);
+        res.status(500).json({ message: "Image download failed", success: false });
+    }
 });
 
+const photoMiddleware = multer({ dest: "uploads/" });
+app.post("/upload", photoMiddleware.array("photos", 100), (req, res) => {
+    const uploadedFiles = req.files.map((file) => {
+        const ext = file.originalname.split(".").pop();
+        const newPath = file.path + "." + ext;
+        fs.renameSync(file.path, newPath);
+        return newPath.replace("uploads\\", "").replace("uploads/", "");
+    });
+    res.status(200).json(uploadedFiles);
+});
+
+app.post("/places", authenticate, async (req, res) => {
+    try {
+        const { title, address, photos, description, perk, extraInfo, checkIn, checkOut, maxGuests } = req.body;
+
+        const placeDoc = await Place.create({
+            owner: req.user._id,
+            title,
+            address,
+            photos,
+            description,
+            perk,
+            extraInfo,
+            checkIn,
+            checkOut,
+            maxGuests,
+        });
+
+        res.status(201).json(placeDoc);
+    } catch (err) {
+        console.error("Error creating place:", err.message);
+        res.status(500).json({ message: "Internal server error", success: false });
+    }
+});
 
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);
-})   
+});

@@ -13,7 +13,7 @@ function LoginPage() {
         e.preventDefault();
         try {
             const response = await axios.post("/login", { email, password });
-            console.log(response);
+            // console.log(response.data);
             setUser(response.data);
             alert(response.data.message);
             setRedirect(true);

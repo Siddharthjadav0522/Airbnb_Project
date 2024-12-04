@@ -13,7 +13,7 @@ export function UserContextProvider({ children }) {
             .then((response) => {
                 setUser(response.data); 
                 setReady(true);
-            })
+            }) 
         }
     }, [])
     return (

@@ -4,7 +4,8 @@ import { UserContext } from './UserContext'
 
 function Header() {
     const { user } = useContext(UserContext);
-
+    // console.log(user);
+    
     return (
         <>
             <header className='flex justify-between items-center flex-wrap'>
