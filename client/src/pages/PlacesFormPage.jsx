@@ -1,10 +1,14 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PhotosUploader from '../component/PhotosUploader';
 import Perks from '../component/Perks';
+import AccountNav from '../component/AccountNav';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 
 
 function PlacesFormPage() {
-
+    const navigate = useNavigate();
+    const { id } = useParams();
     const [title, setTitle] = useState('');
     const [address, setAddress] = useState('');
     const [addedPhotos, setAddedPhotos] = useState([]);
@@ -15,6 +19,26 @@ function PlacesFormPage() {
     const [checkOut, setCheckOut] = useState('');
     const [maxGuests, setMaxGuests] = useState(1);
 
+    useEffect(() => {
+        if (!id) {
+            return
+        }
+        axios.get('/places/' + id).then((response) => {
+            const { data } = response;
+            // console.log(data);
+
+            setTitle(data.title);
+            setAddress(data.address);
+            setAddedPhotos(data.photos);
+            setDescription(data.description);
+            setPerks(data.perks);
+            setExtraInfo(data.extraInfo);
+            setCheckIn(data.checkIn);
+            setCheckOut(data.checkOut);
+            setMaxGuests(data.maxGuests);
+            // setPrice(data.price);
+        });
+    }, [id]);
     const inputHeader = (text) => {
         return (
             <h2 className='text-xl inline-block mt-4'>{text}</h2>
@@ -34,20 +58,29 @@ function PlacesFormPage() {
         );
     }
 
-    const addNewPlace = async (e) => {
+    const savePlace = async (e) => {
         e.preventDefault();
-        await axios.post('/places',
-            {
-                title, address, addedPhotos,
-                description, perks, extraInfo,
-                checkIn, checkOut, maxGuests
-            })
-        setRedirect('/account/places')
+        const placeData = {
+            title, address, addedPhotos,
+            description, perks, extraInfo,
+            checkIn, checkOut, maxGuests
+        }
+        if (id) {
+            //update
+            await axios.put('/places', { id, ...placeData })
+            navigate('/account/places');
+
+        } else {
+            //new place
+            await axios.post('/places', placeData)
+            navigate('/account/places');
+        }
     }
 
     return (
         <>
-            <form action="" onSubmit={addNewPlace}>
+            <AccountNav />
+            <form action="" onSubmit={savePlace}>
                 {preInput('Title', 'Title for your place.should be short and catchy as in advertisement')}
                 <input value={title} onChange={(e) => { setTitle(e.target.value) }} className="w-full border border-gray-400 rounded-2xl py-2 px-3 my-1" type="text" placeholder='title, for example: My lovely apt' />
 
@@ -58,7 +91,7 @@ function PlacesFormPage() {
                 <PhotosUploader addedPhotos={addedPhotos} onChange={setAddedPhotos} />
 
                 {preInput('Description', 'description of the place')}
-                <textarea value={description} onChange={(e) => { setDescription(e.target.value) }} rows={4} className='w-full my-1 py-2 px-4 border rounded-2xl'></textarea>
+                <textarea value={description} onChange={(e) => { setDescription(e.target.value) }} rows={5} className='w-full my-1 py-2 px-4 border rounded-2xl'></textarea>
 
                 {preInput('Perks', 'select all the perks of your place')}
                 <Perks selected={perks} onChange={setPerks} />

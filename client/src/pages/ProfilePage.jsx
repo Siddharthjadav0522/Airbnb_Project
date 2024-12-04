@@ -5,7 +5,7 @@ import { Navigate, Link, useParams } from 'react-router-dom';
 import PlacesPage from './PlacesPage';
 import AccountNav from '../component/AccountNav';
 
-function AccountPage() {
+function ProfilePage() {
     const [redirect, setRedirect] = useState(null);
     const { ready, user, setUser } = useContext(UserContext);
 
@@ -24,10 +24,6 @@ function AccountPage() {
     if (ready && !user && !redirect) {
         return <Navigate to={'/login'} />
     };
-
-
-
-   
 
     if (redirect) {
         return <Navigate to={redirect} />
@@ -52,4 +48,4 @@ function AccountPage() {
     )
 }
 
-export default AccountPage;
+export default ProfilePage;

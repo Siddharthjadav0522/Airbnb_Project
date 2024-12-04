@@ -97,6 +97,7 @@ app.post("/login", async (req, res) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
             sameSite: "strict",
+            maxAge: 24 * 60 * 60 * 1000,
         });
 
         res.status(200).json({
@@ -152,20 +153,21 @@ app.post("/upload", photoMiddleware.array("photos", 100), (req, res) => {
 
 app.post("/places", authenticate, async (req, res) => {
     try {
-        const { title, address, photos, description, perk, extraInfo, checkIn, checkOut, maxGuests } = req.body;
+        const { title, address, addedPhotos, description, perks, extraInfo, checkIn, checkOut, maxGuests } = req.body;
 
         const placeDoc = await Place.create({
             owner: req.user._id,
             title,
             address,
-            photos,
+            photos: addedPhotos,
             description,
-            perk,
+            perks,
             extraInfo,
             checkIn,
             checkOut,
             maxGuests,
         });
+        // console.log(placeDoc);
 
         res.status(201).json(placeDoc);
     } catch (err) {
@@ -173,6 +175,47 @@ app.post("/places", authenticate, async (req, res) => {
         res.status(500).json({ message: "Internal server error", success: false });
     }
 });
+
+app.get('/places', authenticate, async (req, res) => {
+    try {
+        let id = req.user._id;
+        owner = await Place.findOne({ owner: id });
+        res.json(owner);
+    } catch (err) {
+        console.log(err.message)
+    }
+});
+
+app.get('/places/:id', async (req, res) => {
+    let id = req.params.id;
+    try {
+        let place = await Place.findById(id);
+        res.json(place);
+    } catch (err) {
+        console.log(err.message);
+    }
+});
+
+app.put('/places', authenticate, async (req, res) => {
+    const { id, title, address, addedPhotos, description, perks, extraInfo, checkIn, checkOut, maxGuests } = req.body;
+    try {
+        let place = await Place.findById(id);
+        if (!place) {
+            return res.status(404).json({ error: 'Place not found' });
+        }
+        const updatePlace = await Place.findByIdAndUpdate( id , {
+            title, address, 
+            photos:addedPhotos,
+            description, perks, extraInfo,
+            checkIn, checkOut, maxGuests
+        }, { new: true });
+        res.status(200).json({ message: 'Place updated successfully', updatePlace });
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 
 
 app.listen(port, () => {
