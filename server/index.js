@@ -153,7 +153,7 @@ app.post("/upload", photoMiddleware.array("photos", 100), (req, res) => {
 
 app.post("/places", authenticate, async (req, res) => {
     try {
-        const { title, address, addedPhotos, description, perks, extraInfo, checkIn, checkOut, maxGuests } = req.body;
+        const { title, address, addedPhotos, description, perks, extraInfo, checkIn, checkOut, maxGuests,price } = req.body;
 
         const placeDoc = await Place.create({
             owner: req.user._id,
@@ -166,6 +166,7 @@ app.post("/places", authenticate, async (req, res) => {
             checkIn,
             checkOut,
             maxGuests,
+            price
         });
         // console.log(placeDoc);
 
@@ -176,7 +177,7 @@ app.post("/places", authenticate, async (req, res) => {
     }
 });
 
-app.get('/places', authenticate, async (req, res) => {
+app.get('/user-places', authenticate, async (req, res) => {
     try {
         let id = req.user._id;
         owner = await Place.findOne({ owner: id });
@@ -197,14 +198,14 @@ app.get('/places/:id', async (req, res) => {
 });
 
 app.put('/places', authenticate, async (req, res) => {
-    const { id, title, address, addedPhotos, description, perks, extraInfo, checkIn, checkOut, maxGuests } = req.body;
+    const { id, title, address, addedPhotos, description, perks, extraInfo, checkIn, checkOut, maxGuests ,price } = req.body;
     try {
         let place = await Place.findById(id);
         if (!place) {
             return res.status(404).json({ error: 'Place not found' });
         }
         const updatePlace = await Place.findByIdAndUpdate( id , {
-            title, address, 
+            title, address,price, 
             photos:addedPhotos,
             description, perks, extraInfo,
             checkIn, checkOut, maxGuests
@@ -216,6 +217,14 @@ app.put('/places', authenticate, async (req, res) => {
     }
 });
 
+app.get('/places', authenticate, async (req, res) => {
+    try {
+        allPlace = await Place.find();
+        res.json(allPlace);
+    } catch (err) {
+        console.log(err.message)
+    }
+});
 
 
 app.listen(port, () => {
