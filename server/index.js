@@ -178,16 +178,16 @@ app.post("/places", authenticate, async (req, res) => {
 });
 
 app.get('/user-places', authenticate, async (req, res) => {
-    try {
+    try { 
         let id = req.user._id;
-        owner = await Place.findOne({ owner: id });
+        owner = await Place.find({ owner: id });
         res.json(owner);
     } catch (err) {
-        console.log(err.message)
+        console.log(err.message) 
     }
 });
 
-app.get('/places/:id', async (req, res) => {
+app.get('/places/:id',authenticate, async (req, res) => {
     let id = req.params.id;
     try {
         let place = await Place.findById(id);
@@ -217,7 +217,7 @@ app.put('/places', authenticate, async (req, res) => {
     }
 });
 
-app.get('/places', authenticate, async (req, res) => {
+app.get('/places', async (req, res) => {
     try {
         allPlace = await Place.find();
         res.json(allPlace);
