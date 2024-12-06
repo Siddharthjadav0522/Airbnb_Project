@@ -11,6 +11,7 @@ require("dotenv").config();
 
 const User = require("./models/user");
 const Place = require("./models/place");
+const Booking = require("./models/booking");
 
 const app = express();
 const port = 4000;
@@ -153,7 +154,7 @@ app.post("/upload", photoMiddleware.array("photos", 100), (req, res) => {
 
 app.post("/places", authenticate, async (req, res) => {
     try {
-        const { title, address, addedPhotos, description, perks, extraInfo, checkIn, checkOut, maxGuests,price } = req.body;
+        const { title, address, addedPhotos, description, perks, extraInfo, checkIn, checkOut, maxGuests, price } = req.body;
 
         const placeDoc = await Place.create({
             owner: req.user._id,
@@ -169,7 +170,6 @@ app.post("/places", authenticate, async (req, res) => {
             price
         });
         // console.log(placeDoc);
-
         res.status(201).json(placeDoc);
     } catch (err) {
         console.error("Error creating place:", err.message);
@@ -178,16 +178,16 @@ app.post("/places", authenticate, async (req, res) => {
 });
 
 app.get('/user-places', authenticate, async (req, res) => {
-    try { 
+    try {
         let id = req.user._id;
         owner = await Place.find({ owner: id });
         res.json(owner);
     } catch (err) {
-        console.log(err.message) 
+        console.log(err.message)
     }
 });
 
-app.get('/places/:id',authenticate, async (req, res) => {
+app.get('/places/:id', authenticate, async (req, res) => {
     let id = req.params.id;
     try {
         let place = await Place.findById(id);
@@ -198,15 +198,15 @@ app.get('/places/:id',authenticate, async (req, res) => {
 });
 
 app.put('/places', authenticate, async (req, res) => {
-    const { id, title, address, addedPhotos, description, perks, extraInfo, checkIn, checkOut, maxGuests ,price } = req.body;
+    const { id, title, address, addedPhotos, description, perks, extraInfo, checkIn, checkOut, maxGuests, price } = req.body;
     try {
         let place = await Place.findById(id);
         if (!place) {
             return res.status(404).json({ error: 'Place not found' });
         }
-        const updatePlace = await Place.findByIdAndUpdate( id , {
-            title, address,price, 
-            photos:addedPhotos,
+        const updatePlace = await Place.findByIdAndUpdate(id, {
+            title, address, price,
+            photos: addedPhotos,
             description, perks, extraInfo,
             checkIn, checkOut, maxGuests
         }, { new: true });
@@ -221,6 +221,39 @@ app.get('/places', async (req, res) => {
     try {
         allPlace = await Place.find();
         res.json(allPlace);
+    } catch (err) {
+        console.log(err.message)
+    }
+});
+
+app.post("/bookings", authenticate, async (req, res) => {
+    try {
+        const { checkIn, checkOut, numberOfGuests, name, phone, price, place } = req.body;
+        const checkInDate = new Date(checkIn);
+        const checkOutDate = new Date(checkOut);
+        const bookingDoc = await Booking.create({
+            checkIn: checkInDate,
+            checkOut: checkOutDate,
+            name,
+            phone,
+            price,
+            place,
+            guests: numberOfGuests,
+            user: req.user._id
+        });
+        // console.log(bookingDoc);
+        res.status(201).json(bookingDoc);
+    } catch (err) {
+        console.error("Error creating booking:", err.message);
+        res.status(500).json({ message: "Internal server error", success: false });
+    }
+});
+
+app.get('/bookings', authenticate, async (req, res) => {
+    try {
+        const userId = req.user._id;
+        allData = await Booking.find({ user: userId }).populate('place');
+        res.json(allData);
     } catch (err) {
         console.log(err.message)
     }
