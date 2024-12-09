@@ -36,14 +36,17 @@ function PlacesPage() {
             <div className="mt-4">
                 {places.length > 0 ? (
                     places.map((place) => (
-                        <Link key={place._id} to={'/account/places/' + place._id} className="flex flex-wrap 
-                        md:flex-nowrap lg:flex-nowrap cursor-pointer gap-4 bg-gray-100 bg-opacity-80 p-3 rounded-2xl mb-5">
-                            <div className="flex w-36 h-36 bg-gray-300 grow shrink-0">
+                        <Link 
+                            key={place._id} 
+                            to={'/account/places/' + place._id} 
+                            className="flex flex-wrap gap-4 bg-gray-100 bg-opacity-80 p-3 rounded-2xl mb-5 md:flex-nowrap lg:flex-nowrap xl:flex-nowrap"
+                        >
+                            <div className="flex w-full sm:w-36 sm:h-36 bg-gray-300 grow shrink-0">
                                 <PlaceImg place={place} />
                             </div>
-                            <div className="grow-0 shrink">
-                                <h2 className="text-xl">{place.title}</h2>
-                                <p className=" mt-2">{place.description}</p>
+                            <div className="flex-grow-0 sm:ml-4">
+                                <h2 className="text-xl sm:text-2xl">{place.title}</h2>
+                                <p className="mt-2 sm:text-lg">{place.description}</p>
                             </div>
                         </Link>
                     ))

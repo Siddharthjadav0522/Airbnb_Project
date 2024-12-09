@@ -1,13 +1,13 @@
 import axios from "axios";
 import { useContext, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { UserContext } from "../component/UserContext"
 
 function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [redirect, setRedirect] = useState(false);
     const { setUser } = useContext(UserContext);
+    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -16,16 +16,13 @@ function LoginPage() {
             // console.log(response.data);
             setUser(response.data);
             alert(response.data.message);
-            setRedirect(true);
+            navigate('/')
         } catch (error) {
             alert("Login failed");
         }
     };
 
-    if (redirect) {
-        return <Navigate to={"/"} />;
-    }
-
+   
     return (
         <div className="mt-4 flex items-center grow justify-around">
             <div className="mb-64">
