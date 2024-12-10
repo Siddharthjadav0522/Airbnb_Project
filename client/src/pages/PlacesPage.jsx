@@ -41,12 +41,12 @@ function PlacesPage() {
                             to={'/account/places/' + place._id} 
                             className="flex flex-wrap gap-4 bg-gray-100 bg-opacity-80 p-3 rounded-2xl mb-5 md:flex-nowrap lg:flex-nowrap xl:flex-nowrap"
                         >
-                            <div className="flex w-full sm:w-36 sm:h-36 bg-gray-300 grow shrink-0">
+                            <div className="flex w-full sm:w-36 sm:h-36 bg-gray-300 grow shrink-0 hover:brightness-90 overflow-hidden">
                                 <PlaceImg place={place} />
                             </div>
                             <div className="flex-grow-0 sm:ml-4">
-                                <h2 className="text-xl sm:text-2xl">{place.title}</h2>
-                                <p className="mt-2 sm:text-lg">{place.description}</p>
+                                <h2 className="text-md md:text-lg font-medium">{place.title}</h2>
+                                <p className="mt-2 md:text-md ">{place.description}</p>
                             </div>
                         </Link>
                     ))

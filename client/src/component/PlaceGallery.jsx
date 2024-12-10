@@ -27,7 +27,7 @@ function PlaceGallery({ place }) {
     }
     return (
         <div className='grid gap-2 grid-cols-[2fr_2fr] pt-6 relative'>
-            <div className='h-[370px] cursor-pointer' onClick={() => { setShowAllPhotos(true) }}>
+            <div className='h-[370px] cursor-pointer hover:brightness-90' onClick={() => { setShowAllPhotos(true) }}>
                 {
                     place.photos?.[0] && (
                         <img className='w-full rounded-l-xl h-full object-cover' src={`http://localhost:4000/uploads/${place.photos[0]}`} alt="" />)
@@ -35,24 +35,24 @@ function PlaceGallery({ place }) {
             </div>
 
             <div className='grid grid-cols-2 gap-2' >
-                <div className='h-[181px] cursor-pointer' onClick={() => { setShowAllPhotos(true) }}>
+                <div className='h-[181px] cursor-pointer hover:brightness-90' onClick={() => { setShowAllPhotos(true) }}>
                     {
                         place.photos?.[1] && (
                             <img className='w-full h-full  object-cover' src={`http://localhost:4000/uploads/${place.photos[1]}`} alt="" />)
                     }
                 </div>
-                <div className='h-[181px] cursor-pointer' onClick={() => { setShowAllPhotos(true) }}>
+                <div className='h-[181px] cursor-pointer hover:brightness-90' onClick={() => { setShowAllPhotos(true) }}>
                     {
                         place.photos?.[2] && (
                             <img className='w-full h-full object-cover rounded-tr-xl' src={`http://localhost:4000/uploads/${place.photos[2]}`} alt="" />)
                     }
                 </div>
-                <div className='h-[181px] cursor-pointer' onClick={() => { setShowAllPhotos(true) }}>
+                <div className='h-[181px] cursor-pointer hover:brightness-90' onClick={() => { setShowAllPhotos(true) }}>
                     {
                         place.photos?.[3] && (
                             <img className='w-full h-full object-cover' src={`http://localhost:4000/uploads/${place.photos[3]}`} alt="" />)
                     }</div>
-                <div className='h-[181px] cursor-pointer' onClick={() => { setShowAllPhotos(true) }}>
+                <div className='h-[181px] cursor-pointer hover:brightness-90' onClick={() => { setShowAllPhotos(true) }}>
                     {
                         place.photos?.[4] && (
                             <img className='w-full h-full object-cover rounded-br-xl' src={`http://localhost:4000/uploads/${place.photos[4]}`} alt="" />)

@@ -51,12 +51,12 @@ function Header() {
 
                 {/* Menu dropdown */}
                 {menu && (
-                    <div className="absolute right-0 mt-2 bg-white border border-gray-300 rounded-md shadow-lg">
-                        <Link to={user ? '/account' : '/login'} onClick={toggleMenu} className="block px-4 py-2 text-gray-700 hover:bg-gray-200">
+                    <div className="absolute right-0 mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
+                        <Link to={user ? '/account' : '/login'} onClick={toggleMenu} className="block px-4 py-2 text-gray-700 hover:bg-primary hover:text-white">
                             {user ? 'Account' : 'Login'}
                         </Link>
                         {user && (
-                            <div onClick={toggleMenu} className="block px-4 py-2 text-gray-700 hover:bg-gray-200">
+                            <div onClick={toggleMenu} className="block px-4 py-2 text-gray-700 hover:bg-primary hover:text-white">
                                 <button onClick={logout} >Logout</button>
                             </div>
                         )}

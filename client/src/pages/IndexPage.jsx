@@ -9,12 +9,12 @@ function IndexPage() {
     axios
       .get('/places')
       .then((response) => {
-        setPlaces(response.data); // Directly set the data
+        setPlaces(response.data); 
       })
       .catch((error) => {
         console.error('Error fetching places:', error);
       });
-  }, []); // Dependency array correctly placed
+  }, []); 
 
   return (
     <div className='mt-8 grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
@@ -22,7 +22,7 @@ function IndexPage() {
         places.map((place) => (
           <Link key={place._id} to={`/place/${place._id}`}>
 
-            <div className='bg-gray-300 rounded-xl mb-2'>
+            <div className='bg-gray-300 rounded-xl mb-2 hover:brightness-90'>
               {place.photos?.[0] && (
                 <img
                   src={`http://localhost:4000/uploads/${place.photos[0]}`}
