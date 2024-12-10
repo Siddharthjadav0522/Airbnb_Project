@@ -12,7 +12,7 @@ function LoginPage() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("/login", { email, password });
+            const response = await axios.post("/user/login", { email, password });
             // console.log(response.data);
             setUser(response.data);
             alert(response.data.message);

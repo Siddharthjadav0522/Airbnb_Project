@@ -14,7 +14,7 @@ function ProfilePage() {
         subpage = 'profile';
     }
     const logout = async () => {
-        await axios.post('/logout');
+        await axios.post('/user/logout');
         setRedirect('/');
         setUser(null);
     }

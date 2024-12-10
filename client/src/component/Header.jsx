@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { UserContext } from './UserContext';
 import axios from 'axios';
 import AccountNav from './AccountNav';
@@ -7,14 +7,16 @@ import AccountNav from './AccountNav';
 function Header() {
     const { user ,setUser } = useContext(UserContext);
     const [menu, setMenu] = useState(false);
+    const navigate = useNavigate();
 
     const toggleMenu = () => {
         setMenu(!menu);
     };
 
     const logout = async () => {
-        await axios.post('/logout');
+        await axios.post('/user/logout');
         setUser(null);
+        navigate('/');
     }
 
     return (

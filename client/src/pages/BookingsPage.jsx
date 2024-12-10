@@ -10,7 +10,7 @@ function BookingsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    axios.get('/bookings')
+    axios.get('/place/bookings')
       .then((response) => {
         setBookings(response.data);
       })
