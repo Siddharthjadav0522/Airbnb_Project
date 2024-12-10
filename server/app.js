@@ -1,17 +1,18 @@
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+// const bcrypt = require("bcrypt");
+// const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
-const imageDownloader = require("image-downloader");
-const multer = require("multer");
-const fs = require("fs");
+// const imageDownloader = require("image-downloader");
+// const multer = require("multer");
+// const fs = require("fs");
 require("dotenv").config();
+require('./mongoDB')
 
-const User = require("./models/user");
-const Place = require("./models/place");
-const Booking = require("./models/booking");
+// const User = require("./models/user");
+// const Place = require("./models/place");
+// const Booking = require("./models/booking");
 
 const userRouter = require('./routes/user');
 const placeRouter = require('./routes/place');
@@ -20,10 +21,10 @@ const bookingRouter = require('./routes/booking');
 const app = express();
 const port = 4000;
 
-mongoose
-    .connect(process.env.MONGO_URL)
-    .then(() => console.log("DB Connected"))
-    .catch((err) => console.error("DB Connection Error:", err));
+// mongoose
+//     .connect(process.env.MONGO_URL)
+//     .then(() => console.log("DB Connected"))
+//     .catch((err) => console.error("DB Connection Error:", err));
 
 // Middleware
 app.use(express.json());

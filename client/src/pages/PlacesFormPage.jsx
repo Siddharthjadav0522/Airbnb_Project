@@ -19,9 +19,6 @@ function PlacesFormPage() {
     const [maxGuests, setMaxGuests] = useState(1);
     const [price, setPrice] = useState(100);
 
-    // console.log(addedPhotos);
-    
-
     useEffect(() => {
         if (!id) return;
 
@@ -52,7 +49,6 @@ function PlacesFormPage() {
 
     const savePlace = async (e) => {
         e.preventDefault();
-
         const placeData = {
             title,
             address,
@@ -68,10 +64,8 @@ function PlacesFormPage() {
 
         try {
             if (id) {
-                // Update existing place
                 await axios.put('/places', { id, ...placeData });
             } else {
-                // Create new place
                 await axios.post('/places', placeData);
             }
             navigate('/account/places');

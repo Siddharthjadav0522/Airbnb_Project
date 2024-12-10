@@ -1,14 +1,12 @@
 const Place = require('../models/place');
-const authenticate = require('../middlewares/auth');
-const multer = require('multer');
 const imageDownloader = require("image-downloader");
 const fs = require("fs");
-
 
 const createPlace = async (req, res) => {
     try {
         const { title, address, addedPhotos, description, perks, extraInfo, checkIn, checkOut, maxGuests, price } = req.body;
-
+        console.log(req.body);
+        
         const placeDoc = await Place.create({
             owner: req.user._id,
             title,

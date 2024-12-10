@@ -32,7 +32,7 @@ function BookingsPage() {
         {bookings?.length > 0 && bookings.map((booking) => (
           <Link to={`/account/bookings/${booking._id}`}
             key={booking._id}
-            className="w-full max-w-4xl flex flex-col md:flex-row gap-4 bg-slate-100 rounded-xl p-4 mb-4 shadow-md"
+            className="w-full max-w-4xl flex flex-col md:flex-row gap-5 bg-slate-100 rounded-xl p-4 mb-4 shadow-md"
           >
           
             <div className="w-full md:w-48 h-32 md:h-auto">

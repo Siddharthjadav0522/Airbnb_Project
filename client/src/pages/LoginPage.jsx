@@ -1,7 +1,9 @@
 import axios from "axios";
 import { useContext, useState } from "react";
-import { Link, Navigate, useNavigate } from "react-router-dom";
-import { UserContext } from "../component/UserContext"
+import { Link, useNavigate } from "react-router-dom";
+import { UserContext } from "../component/UserContext";
+import { ToastContainer } from "react-toastify";
+import { handleError, handleSuccess } from "../utils";
 
 function LoginPage() {
     const [email, setEmail] = useState("");
@@ -11,54 +13,69 @@ function LoginPage() {
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        if (!email || !password) {
+            return handleError("Please fill in all fields");
+        }
         try {
             const response = await axios.post("/user/login", { email, password });
-            // console.log(response.data);
-            setUser(response.data);
-            alert(response.data.message);
-            navigate('/')
-        } catch (error) {
-            alert("Login failed");
+            const { message, success, error } = response.data;
+            if (success) {
+                handleSuccess(message);
+                setUser(response.data);
+                setTimeout(() => {
+                    navigate("/");
+                }, 1000);
+            } else if (error) {
+                const details = error?.details?.[0]?.message || "An error occurred.";
+                handleError(details);
+            } else {
+                handleError(message);
+            }
+        } catch (err) {
+            const errorMessage = err.response?.data?.message || "Login failed.";
+            handleError(errorMessage);
         }
     };
 
-   
     return (
-        <div className="mt-4 flex items-center grow justify-around">
-            <div className="mb-64">
-                <h1 className=" text-3xl text-center mb-10">Login</h1>
+        <>
+            <div className="md:min-h-[600px] min-h-[500px] flex items-center justify-center p-4">
+                <div className="w-full max-w-md bg-white p-6 shadow-lg rounded-lg">
+                    <h1 className="text-3xl font-bold text-center mb-6 text-gray-700">Login</h1>
 
-                <form action="" className="max-w-md mx-auto" onSubmit={handleLogin}>
-                    <input
-                        className="w-full border border-gray-400 rounded-2xl py-2 px-3 my-1"
-                        type="email"
-                        placeholder="your@gmail.com"
-                        value={email}
-                        onChange={(e) => {
-                            setEmail(e.target.value);
-                        }}
-                    />
-                    <input
-                        className="w-full border border-gray-400 rounded-2xl py-2 px-3 my-1"
-                        type="password"
-                        placeholder="password"
-                        value={password}
-                        onChange={(e) => {
-                            setPassword(e.target.value);
-                        }}
-                    />
-                    <button className="bg-primary text-white w-full p-2 rounded-2xl mt-5">
-                        Login
-                    </button>
-                </form>
-                <div className="py-2 text-center text-gray-500">
-                    Don't have an Account yet?{" "}
-                    <Link to={"/register"} className="underline text-black">
-                        Register now
-                    </Link>
+                    <form className="space-y-4" onSubmit={handleLogin}>
+                        <input
+                            className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring focus:ring-blue-300"
+                            type="email"
+                            placeholder="your@gmail.com"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                        />
+                        <input
+                            className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring focus:ring-blue-300"
+                            type="password"
+                            placeholder="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                        <button
+                            className="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-2 px-4 rounded-lg transition-all"
+                            type="submit"
+                        >
+                            Login
+                        </button>
+                    </form>
+
+                    <div className="text-center text-gray-500 mt-4">
+                        Don't have an account yet?{" "}
+                        <Link to="/register" className="text-black hover:underline">
+                            Register now
+                        </Link>
+                    </div>
                 </div>
             </div>
-        </div>
+            <ToastContainer />
+        </>
     );
 }
 

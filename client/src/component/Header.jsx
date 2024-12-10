@@ -21,13 +21,12 @@ function Header() {
 
     return (
         <header className='flex justify-between items-center flex-wrap'>
-            {/* Logo */}
+            
             <Link to='/' className='logo gap-1 flex text-primary items-center'>
                 <i className="fa-brands fa-airbnb text-4xl"></i>
                 <span className='font-bold text-xl'>airbnb</span>
             </Link>
 
-            {/* Search bar */}
             <div className='gap-3 items-center border border-gray-300 rounded-full py-2 px-3 shadow-md shadow-gray-200 md:flex hidden'>
                 <div className='text-sm'>Anywhere</div>
                 <div className="border border-l border-gray-300 h-6"></div>
@@ -39,7 +38,6 @@ function Header() {
                 </button>
             </div>
 
-            {/* User/Account Menu */}
             <div className='relative'>
                 <button
                     onClick={toggleMenu}
@@ -51,9 +49,8 @@ function Header() {
                     {user && <div>{user.name}</div>}
                 </button>
 
-                {/* Menu dropdown */}
                 {menu && (
-                    <div className="absolute right-0 mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
+                    <div className="absolute right-0 mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-10">
                         <Link to={user ? '/account' : '/login'} onClick={toggleMenu} className="block px-4 py-2 text-gray-700 hover:bg-primary hover:text-white">
                             {user ? 'Account' : 'Login'}
                         </Link>

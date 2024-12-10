@@ -34,11 +34,9 @@ function PhotosUploader({ addedPhotos, onChange }) {
     };
 
     const removePhoto = (filename) => {
-        // Remove the selected photo from the list
         onChange([...addedPhotos.filter((photo) => photo !== filename)]);
     };
     const selectAsMainPhoto = (filename) => {
-        // Remove the selected photo from the list
         onChange([filename,...addedPhotos.filter((photo) => photo !== filename)]);
     };
 
