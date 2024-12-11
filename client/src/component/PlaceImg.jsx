@@ -5,7 +5,8 @@ function PlaceImg({place}) {
         <>
             <img
                 className='object-cover w-full h-full rounded-lg'
-                src={`http://localhost:4000/uploads/${place.photos[0]}`}
+                // src={`http://localhost:4000/uploads/${place.photos[0]}`}
+                src={`${place.photos[0]}`}
                 alt={place.title || "Place image"}
             />
         </>

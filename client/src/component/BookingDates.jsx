@@ -2,7 +2,7 @@ import React from 'react'
 import { differenceInCalendarDays, format } from 'date-fns';
 
 
-function BookingDates({booking}) {
+function BookingDates({ booking }) {
     return (
         <div className="flex flex-wrap items-center text-sm text-gray-600 gap-2 md:gap-4 mb-2">
 
@@ -21,6 +21,7 @@ function BookingDates({booking}) {
                 <i className="fa-regular fa-calendar-days mr-1"></i>
                 <span className="font-medium">Check-out: </span> {format(new Date(booking.checkOut), 'dd-MM-yyyy')}
             </p>
+
         </div>
     )
 }

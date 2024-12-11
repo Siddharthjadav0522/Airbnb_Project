@@ -92,13 +92,25 @@ const uploadLink = async (req, res) => {
 };
 
 const uploadImage = (req, res) => {
-    const uploadedFiles = req.files.map((file) => {
-        const ext = file.originalname.split(".").pop();
-        const newPath = file.path + "." + ext;
-        fs.renameSync(file.path, newPath);
-        return newPath.replace("uploads\\", "").replace("uploads/", "");
-    });
-    res.status(200).json(uploadedFiles);
-};
+    const files = req.files; 
+    if (!files || files.length === 0) {
+      return res.status(400).send({ message: "No files uploaded" });
+    }
+
+    const fileUrls = files.map(file => file.path);
+    res.status(200).json({ message: "Files uploaded successfully", fileUrls });
+  };
+  
+
+// const uploadImage = (req, res) => { 
+//     // console.log(req.files)
+//     const uploadedFiles = req.files.map((file) => {
+//         const ext = file.originalname.split(".").pop();
+//         const newPath = file.path + "." + ext;
+//         fs.renameSync(file.path, newPath);
+//         return newPath.replace("uploads\\", "").replace("uploads/", "");
+//     });
+//     res.status(200).json(uploadedFiles);
+// };
 
 module.exports = { createPlace, updetePlace, getPlace, getOnePlace, userCreatedPlace, uploadLink, uploadImage };

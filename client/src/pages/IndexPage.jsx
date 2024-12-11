@@ -25,7 +25,7 @@ function IndexPage() {
             <div className='bg-gray-300 rounded-xl mb-2 hover:brightness-90'>
               {place.photos?.[0] && (
                 <img
-                  src={`http://localhost:4000/uploads/${place.photos[0]}`}
+                  src={`${place.photos[0]}`}
                   alt={place.title}
                   className="rounded-xl w-full h-64 lg:h-72" />
               )}

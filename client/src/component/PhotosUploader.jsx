@@ -25,7 +25,8 @@ function PhotosUploader({ addedPhotos, onChange }) {
         axios
             .post('/upload', data)
             .then((response) => {
-                const filenames = response.data;
+                const filenames = response.data.fileUrls;
+                // console.log(response.data.fileUrls);
                 onChange([...addedPhotos, ...filenames]);
             })
             .catch((error) => {
@@ -61,7 +62,8 @@ function PhotosUploader({ addedPhotos, onChange }) {
                         <div key={index} className="h-32 flex relative">
                             <img
                                 className="rounded-2xl w-full object-cover"
-                                src={`http://localhost:4000/uploads/${link}`}
+                                src={`${link}`}
+                                // src={`http://localhost:4000/uploads/${link}`}
                                 alt="Uploaded" />
                             <button type='button'
                                 onClick={() => removePhoto(link)}

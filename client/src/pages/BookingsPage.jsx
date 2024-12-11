@@ -9,6 +9,7 @@ function BookingsPage() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // console.log(bookings);
   useEffect(() => {
     axios.get('/place/bookings')
       .then((response) => {
@@ -34,14 +35,14 @@ function BookingsPage() {
             key={booking._id}
             className="w-full max-w-4xl flex flex-col md:flex-row gap-5 bg-slate-100 rounded-xl p-4 mb-4 shadow-md"
           >
-          
+
             <div className="w-full md:w-48 h-32 md:h-auto">
               <PlaceImg place={booking.place} />
             </div>
 
             <div className="flex-1">
               <h2 className="font-semibold text-lg mb-2">{booking.place.title}</h2>
-             <BookingDates booking={booking}/>
+              <BookingDates booking={booking} />
 
               <div className="text-sm text-gray-600">
                 <p>
@@ -49,7 +50,9 @@ function BookingsPage() {
                   <span className="font-medium">Total price: </span> ${booking.price}
                 </p>
               </div>
+
             </div>
+
           </Link>
         ))}
       </div>
