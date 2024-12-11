@@ -4,6 +4,8 @@ import Perks from '../component/Perks';
 import AccountNav from '../component/AccountNav';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
+import { ToastContainer } from "react-toastify";
+import { handleError, handleSuccess } from "../utils";
 
 function PlacesFormPage() {
     const navigate = useNavigate();
@@ -21,7 +23,6 @@ function PlacesFormPage() {
 
     useEffect(() => {
         if (!id) return;
-
         axios.get(`/places/${id}`).then(({ data }) => {
             setTitle(data.title);
             setAddress(data.address);
@@ -66,9 +67,21 @@ function PlacesFormPage() {
             if (id) {
                 await axios.put('/places', { id, ...placeData });
             } else {
-                await axios.post('/places', placeData);
+                const response = await axios.post('/places', placeData);
+                // console.log(response);
+                const { message, success, error } = response.data;
+                if (success) {
+                    handleSuccess(message);
+                } else if (error) {
+                    const details = error?.details?.[0]?.message || "An error occurred.";
+                    handleError(details);
+                } else {
+                    handleError(message);
+                }
             }
-            navigate('/account/places');
+            setTimeout(() => {
+                navigate("/account/places");
+            }, 1000);
         } catch (error) {
             console.error('Failed to save place:', error.message);
         }
@@ -85,6 +98,7 @@ function PlacesFormPage() {
                     className="w-full border border-gray-400 rounded-2xl py-2 px-3 my-1"
                     type="text"
                     placeholder="Title, e.g., My lovely apartment"
+
                 />
 
                 {preInput('Address', 'Address of the place.')}
@@ -142,7 +156,7 @@ function PlacesFormPage() {
                             value={maxGuests}
                             onChange={(e) => setMaxGuests(e.target.value)}
                             type="number"
-                            className="w-full border border-gray-400 rounded-2xl py-2 px-3 my-1"/>
+                            className="w-full border border-gray-400 rounded-2xl py-2 px-3 my-1" />
                     </div>
                     <div>
                         <h3 className="mt-2 -mb-1">price per nigth</h3>
@@ -150,12 +164,13 @@ function PlacesFormPage() {
                             value={price}
                             onChange={(e) => setPrice(e.target.value)}
                             type="number"
-                            className="w-full border border-gray-400 rounded-2xl py-2 px-3 my-1"/>
+                            className="w-full border border-gray-400 rounded-2xl py-2 px-3 my-1" />
                     </div>
                 </div>
 
                 <button className="bg-primary text-white w-full p-2 rounded-2xl mt-5">Save</button>
             </form>
+            <ToastContainer />
         </>
     );
 }

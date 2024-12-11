@@ -5,8 +5,7 @@ const fs = require("fs");
 const createPlace = async (req, res) => {
     try {
         const { title, address, addedPhotos, description, perks, extraInfo, checkIn, checkOut, maxGuests, price } = req.body;
-        console.log(req.body);
-        
+
         const placeDoc = await Place.create({
             owner: req.user._id,
             title,
@@ -20,8 +19,7 @@ const createPlace = async (req, res) => {
             maxGuests,
             price
         });
-        // console.log(placeDoc);
-        res.status(201).json(placeDoc);
+        res.status(201).json({ message: 'Place updated successfully', success: true, placeDoc });
     } catch (err) {
         console.error("Error creating place:", err.message);
         res.status(500).json({ message: "Internal server error", success: false });
@@ -79,12 +77,12 @@ const userCreatedPlace = async (req, res) => {
 
 const uploadLink = async (req, res) => {
     try {
+        // console.log(req.body);
         const { link } = req.body;
-        const newName = "Photo" + Date.now() + ".jpg";
-        const filePath = __dirname + "/uploads/" + newName;
-
-        await imageDownloader.image({ url: link, dest: filePath });
-        res.status(200).json({ filename: newName });
+        // const newName = "Photo" + Date.now() + ".jpg";
+        // const filePath = __dirname + "/uploads/" + newName;
+        // await imageDownloader.image({ url: link, dest: filePath });
+        res.status(200).json({ filename: link });
     } catch (err) {
         console.error("Error downloading image:", err.message);
         res.status(500).json({ message: "Image download failed", success: false });
@@ -92,15 +90,13 @@ const uploadLink = async (req, res) => {
 };
 
 const uploadImage = (req, res) => {
-    const files = req.files; 
+    const files = req.files;
     if (!files || files.length === 0) {
-      return res.status(400).send({ message: "No files uploaded" });
+        return res.status(400).send({ message: "No files uploaded" });
     }
-
     const fileUrls = files.map(file => file.path);
     res.status(200).json({ message: "Files uploaded successfully", fileUrls });
-  };
-  
+};
 
 // const uploadImage = (req, res) => { 
 //     // console.log(req.files)
