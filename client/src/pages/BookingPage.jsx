@@ -58,7 +58,7 @@ function BookingPage() {
           <BookingDates booking={booking} />
         </div>
         <div className='bg-primary px-4 py-2 text-lg text-white rounded-lg flex items-center justify-center'>
-        Totle price : ${booking.price}
+        Totle price : {booking.price.toLocaleString("en-IN")}
         </div>
         
 

@@ -36,19 +36,20 @@ function PlacesPage() {
             <div className="mt-4">
                 {places.length > 0 ? (
                     places.map((place) => (
-                        <Link 
-                            key={place._id} 
-                            to={'/account/places/' + place._id} 
-                            className="flex flex-wrap gap-4 bg-gray-100 bg-opacity-80 p-3 rounded-2xl mb-5 md:flex-nowrap lg:flex-nowrap xl:flex-nowrap"
+                        <Link
+                            key={place._id}
+                            to={'/account/places/' + place._id}
+                            className="flex flex-wrap gap-4 bg-gray-100 bg-opacity-80 p-3 rounded-2xl mb-5"
                         >
-                            <div className="flex w-full sm:w-36 sm:h-36 bg-gray-300 grow shrink-0 hover:brightness-90 overflow-hidden">
-                                <PlaceImg place={place} />
+                            <div className="w-full md:w-32 h-40 md:h-32 bg-gray-300 hover:brightness-90 overflow-hidden">
+                              <PlaceImg place={place}/>
                             </div>
-                            <div className="flex-grow-0 sm:ml-4">
+                            <div className=" md:flex-1">
                                 <h2 className="text-md md:text-lg font-medium">{place.title}</h2>
-                                <p className="mt-2 md:text-md ">{place.description}</p>
+                                <p className="mt-2 md:text-md line-clamp-2">{place.description}</p>
                             </div>
                         </Link>
+
                     ))
                 ) : (
                     <p className="text-center text-gray-500 mt-4">No places found.</p>

@@ -39,10 +39,10 @@ const updetePlace = async (req, res) => {
             description, perks, extraInfo,
             checkIn, checkOut, maxGuests
         }, { new: true });
-        res.status(200).json({ message: 'Place updated successfully', updatePlace });
+        res.status(200).json({ message: 'Place updated successfully',success: true , updatePlace });
     } catch (err) {
         console.error(err.message);
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error' ,success: false });
     }
 };
 

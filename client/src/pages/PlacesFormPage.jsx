@@ -50,6 +50,9 @@ function PlacesFormPage() {
 
     const savePlace = async (e) => {
         e.preventDefault();
+        if (!title || !address || !addedPhotos || !description || !extraInfo || !checkIn || !checkOut || !price) {
+            return handleError("Please fill in all fields");
+        }
         const placeData = {
             title,
             address,
@@ -65,7 +68,11 @@ function PlacesFormPage() {
 
         try {
             if (id) {
-                await axios.put('/places', { id, ...placeData });
+                const response = await axios.put('/places', { id, ...placeData });
+                const { message, success } = response.data;
+                if (success) {
+                    handleSuccess(message);
+                }
             } else {
                 const response = await axios.post('/places', placeData);
                 // console.log(response);

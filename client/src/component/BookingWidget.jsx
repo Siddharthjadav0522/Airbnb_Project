@@ -36,22 +36,36 @@ function BookingWidget({ place }) {
 
     return (
         <div className="bg-white shadow p-6 rounded-2xl">
-            <div >
-                <span className="text-xl">${place.price} </span> night
+            <div className=''>
+                <span className="text-xl">
+                    <i class="fa-solid fa-indian-rupee-sign fa-sm mr-1"></i>
+                    {place.price.toLocaleString("en-IN")}
+                </span> night
             </div>
 
             <div className="border border-gray-400 rounded-xl mt-4 overflow-hidden">
 
-                <div className="flex">
-                    <div className="p-3 border border-r-gray-400">
-                        <label className='font-semibold text-xs block'>CHECK-IN</label>
-                        <input onChange={(e) => { setCheckIn(e.target.value) }} className='text-sm' type="date" value={checkIn} />
+                <div className="flex flex-col md:flex-row">
+                    <div className="p-3 border-b md:border-b-0 md:border-r md:border-r-gray-400 md:w-1/2">
+                        <label className="font-semibold text-xs block">CHECK-IN</label>
+                        <input
+                            onChange={(e) => setCheckIn(e.target.value)}
+                            className="text-sm w-full"
+                            type="date"
+                            value={checkIn}
+                        />
                     </div>
-                    <div className="p-3 ">
-                        <label className='block text-xs font-semibold'>CHECKOUT</label>
-                        <input onChange={(e) => { setCheckOut(e.target.value) }} className='text-sm' type="date" value={checkOut} />
+                    <div className="p-3 md:w-1/2">
+                        <label className="block text-xs font-semibold">CHECKOUT</label>
+                        <input
+                            onChange={(e) => setCheckOut(e.target.value)}
+                            className="text-sm w-full"
+                            type="date"
+                            value={checkOut}
+                        />
                     </div>
                 </div>
+
 
                 <div className="p-3 border-t border-t-gray-400">
                     <label className='block text-xs font-semibold'>GUESTS</label>
@@ -78,9 +92,11 @@ function BookingWidget({ place }) {
             </div>
 
             <button onClick={bookThisPlace} className="bg-primary text-white py-2 px-3 rounded mt-4 w-full">
-                Book this place
+                <span>Book this place</span>
                 {numberOfNights > 0 && (
-                    <span> ${numberOfNights * place.price}</span>
+                    <span className='ml-2'>
+                        <i class="fa-solid fa-indian-rupee-sign fa-sm mr-1"></i>{numberOfNights * place.price}
+                    </span>
                 )}
             </button>
 

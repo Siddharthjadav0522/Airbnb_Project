@@ -9,12 +9,12 @@ function IndexPage() {
     axios
       .get('/places')
       .then((response) => {
-        setPlaces(response.data); 
+        setPlaces(response.data);
       })
       .catch((error) => {
         console.error('Error fetching places:', error);
       });
-  }, []); 
+  }, []);
 
   return (
     <div className='mt-8 grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
@@ -34,7 +34,7 @@ function IndexPage() {
             <h2 className='text-base'>{place.address}</h2>
             <h3 className='text-sm text-gray-500 truncate'>{place.title}</h3>
             <div className='mt-2'>
-              <span className='font-medium'>${place.price}</span>
+              <span className='font-medium'><i class="fa-solid fa-indian-rupee-sign fa-sm"></i>&nbsp;{place.price.toLocaleString("en-IN")}</span>
               <span className='text-sm ml-1'>nigth</span>
             </div>
           </Link>

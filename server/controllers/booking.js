@@ -33,4 +33,19 @@ const userBooking = async (req, res) => {
     }
 };
 
-module.exports = { createBooking, userBooking };
+const cancelBooking = async (req, res) => {
+    try {
+        const bookingId = req.params.id;
+        const cencelBooking = await Booking.findByIdAndDelete(bookingId);
+        if (!cencelBooking) {
+            return res.status(404).json({ message: "Booking not found", success: false });
+        }
+        res.json({ message: "Booking cancelled", success: true });
+    } catch (error) {
+        console.error("Error cancelling booking:", error.message);
+        res.status(500).json({ message: "Internal server error", success: false });
+    }
+
+}
+
+module.exports = { createBooking, userBooking ,cancelBooking };
