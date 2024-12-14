@@ -53,7 +53,7 @@ function BookingsPage() {
         {bookings?.length > 0 && bookings.map((booking) => (
           <div
             key={booking._id}
-            className="w-full max-w-4xl flex flex-col md:flex-row gap-5 bg-slate-100 rounded-xl p-4 mb-4 shadow-md"
+            className="w-full max-w-5xl flex flex-col md:flex-row gap-5 bg-slate-100 rounded-xl p-4 mb-4 shadow-md"
           >
 
             <Link to={`/account/bookings/${booking._id}`} className="w-full md:w-48 h-40 md:h-auto">
@@ -69,7 +69,7 @@ function BookingsPage() {
                 <p>
                   <i className="fa-regular fa-credit-card mr-1"></i>
                   <span className="font-medium mr-2">Total price :</span >
-                  <i class="fa-solid fa-indian-rupee-sign fa-sm mr-1"></i>
+                  <i className="fa-solid fa-indian-rupee-sign fa-sm mr-1"></i>
                   {booking.price.toLocaleString("en-IN")}
                 </p>
               </div>

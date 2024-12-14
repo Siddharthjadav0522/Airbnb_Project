@@ -5,7 +5,7 @@ import axios from 'axios';
 import AccountNav from './AccountNav';
 
 function Header() {
-    const { user ,setUser } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
     const [menu, setMenu] = useState(false);
     const navigate = useNavigate();
 
@@ -21,7 +21,7 @@ function Header() {
 
     return (
         <header className='flex justify-between items-center flex-wrap'>
-            
+
             <Link to='/' className='logo gap-1 flex text-primary items-center'>
                 <i className="fa-brands fa-airbnb text-4xl"></i>
                 <span className='font-bold text-xl'>airbnb</span>
@@ -41,10 +41,10 @@ function Header() {
             <div className='relative'>
                 <button
                     onClick={toggleMenu}
-                    className='flex gap-3 border border-gray-300 rounded-full py-2 px-4 items-center'>
+                    className='flex gap-3 border border-gray-300 rounded-full py-2 px-3 md:px-4 items-center'>
                     <i className="fa-solid fa-bars text-gray-700"></i>
-                    <div className='bg-gray-500 text-white rounded-full w-8 h-8 flex items-center justify-center'>
-                        <i className="fa-solid fa-user"></i>
+                    <div className='bg-gray-500 text-white rounded-full w-7 h-7 md:w-8 md:h-8 flex items-center justify-center'>
+                        <i className="fa-solid fa-user fa-sm"></i>
                     </div>
                     {user && <div>{user.name}</div>}
                 </button>

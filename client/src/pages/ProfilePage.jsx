@@ -44,8 +44,8 @@ function ProfilePage() {
                         <div className="mb-8">
                             <p className="text-lg">
                                 <span className="mr-1">Logged in as:</span>
-                                <span className="font-medium mr-2">{user.name}</span>
-                                <span className="font-medium">{user.email}</span>
+                                <span className="md:font-medium mr-2 text-md md:text-lg">{user.name}</span>
+                                <span className="md:font-medium text-md md:text-lg">{user.email}</span>
                             </p>
                         </div>
                         <button

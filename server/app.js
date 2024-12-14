@@ -4,7 +4,7 @@ const cookieParser = require("cookie-parser");
 require("dotenv").config();
 require('./mongoDB')
 
-const userRouter = require('./routes/user');
+const userRouter = require('./routes/user'); 
 const placeRouter = require('./routes/place');
 const bookingRouter = require('./routes/booking');
 

@@ -3,7 +3,8 @@ import { differenceInCalendarDays } from "date-fns";
 import axios from 'axios';
 import { UserContext } from "./UserContext.jsx";
 import { useNavigate } from 'react-router-dom';
-
+import { ToastContainer } from "react-toastify";
+import { handleError, handleSuccess } from "../utils.js";
 
 function BookingWidget({ place }) {
     const [checkIn, setCheckIn] = useState('');
@@ -25,20 +26,36 @@ function BookingWidget({ place }) {
     };
 
     const bookThisPlace = async () => {
+        if (!checkIn || !checkOut || !numberOfGuests || !name || !phone) {
+            return handleError("Please fill in all fields");
+        }
         const response = await axios.post('/place/bookings', {
             checkIn, checkOut, numberOfGuests, name, phone,
             place: place._id,
             price: numberOfNights * place.price
         });
-        naviget(`/account/bookings/${response.data._id}`)
-        // console.log(response.data._id);
+
+        const { message, success, error } = response.data;
+        console.log(message, success);
+        if (success) {
+            handleSuccess(message);
+            setTimeout(() => {
+                naviget(`/account/bookings/${response.data.bookingDoc._id}`);
+            }, 1300);
+        } else if (error) {
+            const details = error?.details?.[0]?.message;
+            handleError(details);
+        } else {
+            handleError(message);
+        }
+        // console.log(response.data.bookingDoc._id);
     }
 
     return (
         <div className="bg-white shadow p-6 rounded-2xl">
-            <div className=''>
+            <div>
                 <span className="text-xl">
-                    <i class="fa-solid fa-indian-rupee-sign fa-sm mr-1"></i>
+                    <i className="fa-solid fa-indian-rupee-sign fa-sm mr-1"></i>
                     {place.price.toLocaleString("en-IN")}
                 </span> night
             </div>
@@ -95,11 +112,11 @@ function BookingWidget({ place }) {
                 <span>Book this place</span>
                 {numberOfNights > 0 && (
                     <span className='ml-2'>
-                        <i class="fa-solid fa-indian-rupee-sign fa-sm mr-1"></i>{numberOfNights * place.price}
+                        <i className="fa-solid fa-indian-rupee-sign fa-sm mr-1"></i>{numberOfNights * place.price}
                     </span>
                 )}
             </button>
-
+            <ToastContainer />
         </div>
     )
 }
