@@ -71,7 +71,7 @@ function BookingWidget({ place }) {
     };
 
     return (
-        <div className="bg-white shadow p-6 rounded-2xl">
+        <div className="bg-white shadow md:p-6 py-4 px-2 rounded-2xl">
             <div>
                 <span className="text-xl">
                     <i className="fa-solid fa-indian-rupee-sign fa-sm mr-1"></i>

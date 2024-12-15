@@ -1,27 +1,5 @@
 const Booking = require('../models/booking');
 
-// const createBooking = async (req, res) => {
-//     try {
-//         const { checkIn, checkOut, numberOfGuests, name, phone, price, place } = req.body;
-//         const checkInDate = new Date(checkIn);
-//         const checkOutDate = new Date(checkOut);
-//         const bookingDoc = await Booking.create({
-//             checkIn: checkInDate,
-//             checkOut: checkOutDate,
-//             name,
-//             phone,
-//             price,
-//             place,
-//             guests: numberOfGuests,
-//             user: req.user._id
-//         });
-//         res.status(201).json({ message: "Booking created successfully", success: true, bookingDoc });
-//     } catch (err) {
-//         console.error("Error creating booking:", err.message);
-//         res.status(500).json({ message: "Internal server error", success: false });
-//     }
-// };
-
 const createBooking = async (req, res) => {
     try {
         const { checkIn, checkOut, numberOfGuests, name, phone, price, place } = req.body;
@@ -69,7 +47,7 @@ const userBooking = async (req, res) => {
         console.log(err.message)
     }
 };
- 
+
 const cancelBooking = async (req, res) => {
     try {
         const bookingId = req.params.id;

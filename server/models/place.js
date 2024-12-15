@@ -4,12 +4,11 @@ const placeSchema = new mongoose.Schema({
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
-        required: true
     },
     title: {
         type: String,
         required: true
-    }, 
+    },
     address: {
         type: String,
         required: true
@@ -31,7 +30,6 @@ const placeSchema = new mongoose.Schema({
         min: 0,
         max: 24
     },
-
     checkOut: {
         type: Number,
         min: 0,
@@ -45,6 +43,12 @@ const placeSchema = new mongoose.Schema({
         type: Number,
         min: 0
     },
+    reviews: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Review',
+        }
+    ],
 });
 
 const placeModel = mongoose.model('Place', placeSchema);
