@@ -36,12 +36,12 @@ function IndexPage() {
 
           {places.map((place) => (
             <Link key={place._id} to={`/place/${place._id}`}>
-              <div className="bg-gray-300 rounded-xl mb-2 hover:brightness-90">
+              <div className="h-64 lg:h-64 bg-gray-200 rounded-xl mb-2 hover:brightness-90">
                 {place.photos?.[0] && (
                   <img
                     src={`${place.photos[0]}`}
                     alt={place.title}
-                    className="rounded-xl w-full h-64 lg:h-64"
+                    className="rounded-xl w-full h-full "
                   />
                 )}
               </div>

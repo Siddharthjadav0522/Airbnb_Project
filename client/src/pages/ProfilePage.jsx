@@ -50,7 +50,7 @@ function ProfilePage() {
                         </div>
                         <button
                             onClick={logout}
-                            className="bg-primary font-medium text-white w-full py-3 px-6 rounded-2xl max-w-sm mx-auto"
+                            className="bg-primary md:text-lg font-medium text-white w-full md:py-3 py-2 px-6 rounded-2xl max-w-sm mx-auto"
                         >
                             Logout
                         </button>

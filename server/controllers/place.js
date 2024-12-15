@@ -98,15 +98,19 @@ const uploadImage = (req, res) => {
     res.status(200).json({ message: "Files uploaded successfully", fileUrls });
 };
 
-// const uploadImage = (req, res) => { 
-//     // console.log(req.files)
-//     const uploadedFiles = req.files.map((file) => {
-//         const ext = file.originalname.split(".").pop();
-//         const newPath = file.path + "." + ext;
-//         fs.renameSync(file.path, newPath);
-//         return newPath.replace("uploads\\", "").replace("uploads/", "");
-//     });
-//     res.status(200).json(uploadedFiles);
-// };
+const placeDelete = async (req, res) => {
+    try {
+        const placeId = req.params.id;
+        const deletePlace = await Place.findByIdAndDelete(placeId);
+        if (!deletePlace) {
+            return res.status(404).json({ message: "Place not found", success: false });
+        }
+        // console.log(deletePlace);
+        res.json({ message: "Place deleting", success: true });
+    } catch (error) {
+        console.error("Error deleting place:", error.message);
+        res.status(500).json({ message: "Internal server error", success: false });
+    }
+}
 
-module.exports = { createPlace, updetePlace, getPlace, getOnePlace, userCreatedPlace, uploadLink, uploadImage };
+module.exports = { createPlace, updetePlace, getPlace, getOnePlace, userCreatedPlace, uploadLink, uploadImage ,placeDelete };

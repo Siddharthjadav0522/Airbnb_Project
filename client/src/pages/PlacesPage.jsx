@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom';
 import AccountNav from '../component/AccountNav';
 import axios from 'axios';
 import PlaceImg from '../component/PlaceImg';
+import { ToastContainer } from "react-toastify";
+import { handleError, handleSuccess } from "../utils";
+
 
 function PlacesPage() {
     const [places, setPlaces] = useState([]);
@@ -18,6 +21,24 @@ function PlacesPage() {
             .finally(() => setLoading(false));
     }, []);
 
+    const placeDelete = async (id) => {
+        try {
+            // console.log(id);   
+            const response = await axios.delete(`/places/${id}`);
+            const { message, success, error } = response.data;
+            if (success) {
+                handleSuccess(message);
+                setPlaces((prev) => prev.filter((i) => i._id !== id));
+            } else if (error) {
+                const details = error?.details?.[0]?.message;
+                handleError(details);
+            } else {
+                handleError(message);
+            }
+        } catch {
+            handleError("Failed to delete the place.");
+        }
+    }
     return (
         <div>
             <AccountNav />
@@ -37,29 +58,29 @@ function PlacesPage() {
                     )}
                     <div className="mt-4 flex flex-col justify-center items-center ">
                         {places.map((place) => (
-                            <Link
+                            <div
                                 key={place._id}
-                                to={'/account/places/' + place._id}
-                                className="w-full max-w-5xl flex flex-wrap gap-4 bg-gray-100 bg-opacity-80 p-3 rounded-2xl mb-5 hover:bg-gray-200"
+                                className="w-full max-w-5xl flex flex-wrap gap-4 bg-slate-100 shadow-md p-3 rounded-2xl mb-5"
                             >
-                                <div className="w-full md:w-48 h-40 md:h-32 bg-gray-300 hover:brightness-90 overflow-hidden">
+                                <Link to={'/account/places/' + place._id} className="w-full md:w-48 h-40 md:h-32 bg-gray-300 hover:brightness-90 rounded-lg overflow-hidden">
                                     <PlaceImg place={place} />
-                                </div>
-                                <div className="md:flex-1">
+                                </Link>
+                                <Link to={'/account/places/' + place._id} className="md:flex-1">
                                     <h2 className="text-md md:text-lg font-medium">{place.title}</h2>
                                     <p className="mt-2 md:text-md line-clamp-2">{place.description}</p>
-                                </div>
+                                </Link>
                                 <div className='flex w-full md:w-auto md:justify-center items-end'>
                                     <button
                                         onClick={() => placeDelete(place._id)}
                                         className='px-4 py-1 w-full rounded bg-primary font-semibold text-md text-white hover:bg-rose-600'>
                                         <i className="fa-solid fa-trash fa-sm mr-1"></i>Delete</button>
                                 </div>
-                            </Link>
+                            </div>
                         ))}
                     </div>
                 </>
             )}
+            <ToastContainer />
         </div>
     );
 }

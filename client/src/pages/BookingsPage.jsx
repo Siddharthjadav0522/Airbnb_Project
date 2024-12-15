@@ -37,7 +37,6 @@ function BookingsPage() {
         const details = error?.details?.[0]?.message || "An error occurred.";
         handleError(details);
       }
-
     } catch {
       handleError("Failed to delete the booking.");
     }
@@ -77,7 +76,10 @@ function BookingsPage() {
             </Link>
 
             <div className='flex md:justify-center items-end'>
-              <button onClick={() => bookingDelete(booking._id)} className='px-4 py-1 w-full rounded bg-primary font-semibold text-md text-white hover:bg-rose-600'>Delete</button>
+              <button
+                onClick={() => bookingDelete(booking._id)}
+                className='px-4 py-1 w-full rounded bg-primary font-semibold text-md text-white hover:bg-rose-600'>
+                <i className="fa-solid fa-xmark fa-md mr-1"></i>Cancel</button>
             </div>
 
           </div>

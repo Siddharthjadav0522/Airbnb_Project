@@ -41,7 +41,7 @@ function PlacePage() {
             <div className='my-8 grid gap-6 md:gap-10 grid-cols-1 md:grid-cols-[2fr_1fr]'>
                 <div>
                     <div className='mb-3'>
-                        <h2 className='text-xl font-semibold'>Description</h2>
+                        <h2 className='text-xl font-semibold mb-1'>Description</h2>
                         <p>{place.description}</p>
                     </div>
                     <p>Check-in: {place.checkIn}</p>

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createPlace, updetePlace, getPlace, getOnePlace, userCreatedPlace, uploadLink, uploadImage } = require('../controllers/place');
+const { createPlace, updetePlace, getPlace, getOnePlace, userCreatedPlace, uploadLink, uploadImage ,placeDelete } = require('../controllers/place');
 const authenticate = require('../middlewares/auth');
 const multer = require('multer')
 const { storage } = require("../config/cloudConfig");
@@ -15,5 +15,6 @@ router.post('/upload', upload.array("photos",100), uploadImage);
 // router.post('/upload', photoMiddleware.array("photos", 100), uploadImage);
 router.post('/places', authenticate, createPlace);
 router.put('/places', authenticate, updetePlace);
+router.delete('/places/:id', authenticate, placeDelete);
 
 module.exports = router;

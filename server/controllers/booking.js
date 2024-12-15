@@ -69,7 +69,7 @@ const userBooking = async (req, res) => {
         console.log(err.message)
     }
 };
-
+ 
 const cancelBooking = async (req, res) => {
     try {
         const bookingId = req.params.id;
@@ -82,7 +82,6 @@ const cancelBooking = async (req, res) => {
         console.error("Error cancelling booking:", error.message);
         res.status(500).json({ message: "Internal server error", success: false });
     }
-
 }
 
 module.exports = { createBooking, userBooking, cancelBooking };
