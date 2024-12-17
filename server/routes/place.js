@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { createPlace, updetePlace, getPlace, getOnePlace, userCreatedPlace, uploadLink, uploadImage ,placeDelete } = require('../controllers/place');
-const authenticate = require('../middlewares/auth');
+const {authenticate} = require('../middlewares/auth');
 const multer = require('multer')
 const { storage } = require("../config/cloudConfig");
 const upload = multer({ storage });

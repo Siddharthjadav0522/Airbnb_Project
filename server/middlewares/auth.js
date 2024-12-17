@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
+const Review = require('../models/review')
 
 const authenticate = async (req, res, next) => {
     const token = req.cookies.token;
@@ -19,4 +20,13 @@ const authenticate = async (req, res, next) => {
     }
 };
 
-module.exports = authenticate;
+const isReviewAuthor = async (req, res, next) => {
+    let { id, reviewId } = req.params;
+    let review = await Review.findById(reviewId);
+    if (!review.author._id.equals(req.user._id)) {
+        return res.json({message:'You are not the author of this review'})
+    }
+    next();
+}
+
+module.exports = {authenticate , isReviewAuthor};

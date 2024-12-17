@@ -33,8 +33,8 @@ const getReviews = async (req, res) => {
         const place = await Place.findById(id).populate({
             path: 'reviews',
             populate: {
-                path: 'author', 
-                select: 'name email', 
+                path: 'author',
+                select: 'name email',
             },
         });
         res.status(200).json({ reviews: place.reviews });
@@ -43,4 +43,13 @@ const getReviews = async (req, res) => {
     }
 }
 
-module.exports = { createReview, getReviews }
+const deleteReview = async (req, res) => {
+    const { id, reviewId } = req.params
+    console.log(id, reviewId);
+    await Place.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
+    await Review.findByIdAndDelete(reviewId);
+    res.status(200).json({ success: true, message: 'Review deleted successfully' });
+}
+
+
+module.exports = { createReview, getReviews, deleteReview }

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Review = require('../models/review');
 
 const placeSchema = new mongoose.Schema({
     owner: {
@@ -50,6 +51,12 @@ const placeSchema = new mongoose.Schema({
         }
     ],
 });
+
+placeSchema.post("findOneAndDelete", async (place) => {
+    if (place) {
+        await Review.deleteMany({ _id: { $in: place.reviews } })
+    }
+})
 
 const placeModel = mongoose.model('Place', placeSchema);
 

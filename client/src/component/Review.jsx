@@ -7,6 +7,7 @@ function Review({ place }) {
     const [rating, setRating] = useState('1');
     const [comment, setComment] = useState('');
     const [reviews, setReviews] = useState([]);
+    const placeId = place._id;
 
     useEffect(() => {
         const fetchReviews = async () => {
@@ -23,7 +24,6 @@ function Review({ place }) {
     }, [place._id])
 
     const handleReview = async () => {
-        const placeId = place._id;
         if (!comment) {
             return handleError('Please fill in all fields.');
         }
@@ -47,6 +47,27 @@ function Review({ place }) {
             handleError('Failed to submit review. Please try again.');
         }
     };
+
+    const reviewDelete = async (reviewId) => {
+        // console.log(reviewId);
+        try {
+            const response = await axios.delete(`/place/${placeId}/reviews/${reviewId}`);
+            const { message, success, error } = response.data;
+            if (success) {
+                handleSuccess(message);
+                const updatedReviews = await axios.get(`/place/${place._id}/reviews`);
+                setReviews(updatedReviews.data.reviews);
+            } else if (error) {
+                const details = error?.details?.[0]?.message;
+                handleError(details);
+            } else {
+                handleError(message);
+            }
+        } catch (error) {
+            console.error(error);
+            handleError('Failed to submit review. Please try again.');
+        }
+    }
 
     return (
         <div className="bg-white md:p-3 p-2">
@@ -107,7 +128,7 @@ function Review({ place }) {
             <div>
                 <h2 className="mb-2">Comment</h2>
                 <textarea
-                    rows={3}
+                    rows={4}
                     className="border-2 w-full lg:w-2/4 px-4 py-2"
                     onChange={(e) => setComment(e.target.value)}
                     value={comment}
@@ -128,11 +149,16 @@ function Review({ place }) {
                         <div className="grid gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                             {reviews.length > 0 &&
                                 reviews.map((review) => (
-                                    <div key={review._id} className=' shadow-md  py-2 px-3'>
-                                        <h2 className='text-lg'>{review.author.name}</h2>
-                                        <p className="starability-result my-1" data-rating={review.rating}></p>
-                                        <p className='text-md mt-3'>{review.comment}</p>
-
+                                    <div key={review._id} className='shadow-md flex flex-col justify-between py-2 px-3'>
+                                        <div>
+                                            <h2 className='text-lg'>{review.author.name}</h2>
+                                            <p>{review.createdAt}</p>
+                                            <p className="starability-result my-1" data-rating={review.rating}></p>
+                                            <p className='h-20 overflow-hidden text-ellipsis mt-3 mb-1 text-sm'>{review.comment}</p>
+                                        </div>
+                                        <div className='flex justify-end items-center mt-1 md:mt-2'>
+                                            <button onClick={() => reviewDelete(review._id)} className='bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-md'>Delete</button>
+                                        </div>
                                     </div>
                                 ))
                             }

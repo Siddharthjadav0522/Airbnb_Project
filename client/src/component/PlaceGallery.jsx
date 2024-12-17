@@ -5,7 +5,7 @@ function PlaceGallery({ place }) {
 
     if (showAllPhotos) {
         return (
-            <div className='absolute inset-0 bg-white min-w-full min-h-max overflow-auto flex justify-center'>
+            <div className='absolute inset-0 bg-white min-w-full min-h-max overflow-auto flex justify-center z-20'>
                 <div className='md:px-6 px-3 py-10 lg:max-w-7xl h-full w-full lg:py-10 grid gap-4'>
                     <div>
                         <button onClick={() => { setShowAllPhotos(false) }} className='flex gap-2 px-3 py-1 rounded items-center fixed
@@ -17,7 +17,7 @@ function PlaceGallery({ place }) {
                     <div className='grid lg:grid-cols-2 grid-cols-1 gap-2'>
                     {
                         place?.photos?.length > 0 && place.photos.map((photo, index) => (
-                            <div className='w-full lg:h-96 md:h-72 h-64 bg-gray-300' key={index}>
+                            <div className='w-full lg:h-96 md:h-80 h-64 bg-gray-300' key={index}>
                                 <img className='w-full h-full object-cover' src={`${photo}`} alt="" />
                             </div>
                         ))
