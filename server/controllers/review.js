@@ -45,7 +45,7 @@ const getReviews = async (req, res) => {
 
 const deleteReview = async (req, res) => {
     const { id, reviewId } = req.params
-    console.log(id, reviewId);
+    // console.log(id, reviewId);
     await Place.findByIdAndUpdate(id, { $pull: { reviews: reviewId } });
     await Review.findByIdAndDelete(reviewId);
     res.status(200).json({ success: true, message: 'Review deleted successfully' });

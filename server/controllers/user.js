@@ -1,10 +1,63 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const nodemailer = require("nodemailer");
+
+const otpStore = {};
+
+const otpVerifyEmail = async (req, res) => {
+    let { email } = req.body;
+    let subject = "OTP from siddharth jadav";
+    let otp = Math.floor(1000 + Math.random() * 9000);
+
+    otpStore.email = {
+        otp: otp,
+        time: Date.now()
+    }
+
+    const transporter = nodemailer.createTransport({
+        service: "gmail",
+        host: "smtp.gmail.com",
+        auth: {
+            user: "f477siddharth@gmail.com",
+            pass: "woxp yhla mtks hljp",
+        },
+        secure: true,
+    });
+
+    let html = `<p>This is your otp , it will expire in 2 minites</P>
+    <h1>OTP : ${otp}</h1>
+    <p>Thank you and best regards</p>
+    `
+
+    const mailData = {
+        from: "f477siddharth@gmail.com",
+        to: email,
+        subject: subject,
+        html: html,
+    }
+    transporter.sendMail(mailData);
+
+    // console.log(otpStore);
+    return res.status(200).json({ message: "OTP sent successfully!", success: true });
+};
 
 const register = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        let { name, email, password, otp } = req.body;
+        console.log(req.body);
+        otp = Number(otp)
+
+        if (!otpStore.email) {
+            return res.status(400).json({ message: "OTP not sent or expired" });
+        }
+
+        if (otpStore.email.otp !== otp || (Date.now() - otpStore.email.time >= 60000)) {
+            return res.json({ message: "email verification fail" });
+        };
+
+        delete otpStore.email;
+
         const existingUser = await User.findOne({ email });
 
         if (existingUser) {
@@ -71,4 +124,6 @@ const profile = (req, res) => {
     const { name, email, _id } = req.user;
     res.json({ name, email, _id });
 };
-module.exports = { register, login, logout, profile };
+
+
+module.exports = { register, login, logout, profile, otpVerifyEmail };

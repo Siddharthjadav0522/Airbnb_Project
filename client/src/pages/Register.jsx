@@ -8,19 +8,40 @@ function Register() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [otp, setOtp] = useState("");
+    const [isOtpSent, setIsOtpSent] = useState(false);
     const navigate = useNavigate();
 
+    const sendOtp = async () => {
+        if (!email) {
+            return handleError("Please provide a valid email address.");
+        }
+        try {
+            const response = await axios.post("/user/register/send-otp", { email });
+            const { message, success } = response.data;
+            if (success) {
+                handleSuccess(message);
+                setIsOtpSent(true);
+            } else {
+                handleError(message);
+            }
+        } catch (err) {
+            const errorMessage = err.response?.data?.message || "Failed to send OTP.";
+            handleError(errorMessage);
+        }
+    };
 
     const handleRegister = async (e) => {
         e.preventDefault();
-        if (!name || !email || !password) {
-            return handleError("Please fill in all fields");
+        if (!name || !email || !password || !otp) {
+            return handleError("Please fill in all fields and enter the OTP.");
         }
         try {
             const response = await axios.post("/user/register", {
                 name,
                 email,
                 password,
+                otp,
             });
             const { message, success, error } = response.data;
             if (success) {
@@ -35,7 +56,7 @@ function Register() {
                 handleError(message);
             }
         } catch (err) {
-            const errorMessage = err.response?.data?.message || "Registration failed .";
+            const errorMessage = err.response?.data?.message || "Registration failed.";
             handleError(errorMessage);
         }
     };
@@ -47,7 +68,7 @@ function Register() {
                     <h1 className="text-3xl font-bold text-center mb-6 text-gray-700">
                         Register
                     </h1>
-                    <form className="space-y-4" onSubmit={handleRegister}>
+                    <form className="space-y-4">
                         <input
                             className="w-full border border-gray-400 rounded-2xl py-2 px-4 focus:outline-none focus:ring focus:ring-blue-300"
                             type="text"
@@ -69,12 +90,34 @@ function Register() {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
-                        <button
-                            className="bg-rose-500 hover:bg-rose-600 text-white w-full py-2 px-4 rounded-2xl transition-all"
-                            type="submit"
-                        >
-                            Register
-                        </button>
+
+                        {isOtpSent && (
+                            <input
+                                className="w-full border border-gray-400 rounded-2xl py-2 px-4 focus:outline-none focus:ring focus:ring-blue-300"
+                                type="text"
+                                placeholder="Enter OTP"
+                                value={otp}
+                                onChange={(e) => setOtp(e.target.value)}
+                            />
+                        )}
+
+                        {!isOtpSent ? (
+                            <button
+                                onClick={sendOtp}
+                                className="bg-rose-500 hover:bg-rose-600 text-white w-full py-2 px-4 rounded-2xl transition-all"
+                                type="button"
+                            >
+                                Send OTP
+                            </button>
+                        ) : (
+                            <button
+                                onClick={handleRegister}
+                                className="bg-rose-500 hover:bg-rose-600 text-white w-full py-2 px-4 rounded-2xl transition-all"
+                                type="submit"
+                            >
+                                Register
+                            </button>
+                        )}
                     </form>
                     <div className="py-4 text-center text-gray-500">
                         Already a member?{" "}
