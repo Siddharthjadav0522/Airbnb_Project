@@ -19,19 +19,19 @@ const otpVerifyEmail = async (req, res) => {
         service: "gmail",
         host: "smtp.gmail.com",
         auth: {
-            user: "f477siddharth@gmail.com",
-            pass: "woxp yhla mtks hljp",
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
         },
         secure: true,
     });
 
-    let html = `<p>This is your otp , it will expire in 2 minites</P>
-    <h1>OTP : ${otp}</h1>
-    <p>Thank you and best regards</p>
-    `
+    let html = `<h1>${otp}</h1>
+    <p>This is your verification code.</p>
+    <p>Please keep this code confidential for your security. Thank you for using our service!</p>`;
+
 
     const mailData = {
-        from: "f477siddharth@gmail.com",
+        from: process.env.EMAIL_USER,
         to: email,
         subject: subject,
         html: html,
@@ -45,7 +45,6 @@ const otpVerifyEmail = async (req, res) => {
 const register = async (req, res) => {
     try {
         let { name, email, password, otp } = req.body;
-        console.log(req.body);
         otp = Number(otp)
 
         if (!otpStore.email) {

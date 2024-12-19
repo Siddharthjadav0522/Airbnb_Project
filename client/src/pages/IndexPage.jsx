@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { UserContext } from '../component/UserContext';
 
 function IndexPage() {
   const [places, setPlaces] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { user } = useContext(UserContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -19,6 +22,15 @@ function IndexPage() {
         setLoading(false);
       });
   }, []);
+
+  const handlePlaceClick = (placeId) => {
+    if (!user) {
+      navigate('/login');
+      alert(' Please login to view places');
+    } else {
+      navigate(`/place/${placeId}`);
+    }
+  };
 
   return (
     <div className="my-8">
@@ -35,28 +47,32 @@ function IndexPage() {
           )}
 
           {places.map((place) => (
-            <Link key={place._id} to={`/place/${place._id}`}>
+            <div
+              key={place._id}
+              onClick={() => handlePlaceClick(place._id)}
+              className="cursor-pointer"
+            >
               <div className="h-64 lg:h-64 bg-gray-200 rounded-xl mb-2 hover:brightness-90">
                 {place.photos?.[0] && (
                   <img
                     src={`${place.photos[0]}`}
                     alt={place.title}
-                    className="rounded-xl w-full h-full "
+                    className="rounded-xl w-full h-full"
                   />
                 )}
               </div>
-              <div className='ml-1'>
-              <h2 className="text-base">{place.address}</h2>
-              <h3 className="text-sm text-gray-500 truncate">{place.title}</h3>
-              <div className="mt-2">
-                <span className="font-medium">
-                  <i className="fa-solid fa-indian-rupee-sign fa-sm"></i>&nbsp;
-                  {place.price.toLocaleString('en-IN')}
-                </span>
-                <span className="text-sm ml-1">night</span>
+              <div className="ml-1">
+                <h2 className="text-base">{place.address}</h2>
+                <h3 className="text-sm text-gray-500 truncate">{place.title}</h3>
+                <div className="mt-2">
+                  <span className="font-medium">
+                    <i className="fa-solid fa-indian-rupee-sign fa-sm"></i>&nbsp;
+                    {place.price.toLocaleString('en-IN')}
+                  </span>
+                  <span className="text-sm ml-1">night</span>
                 </div>
               </div>
-            </Link>
+            </div>
           ))}
         </div>
       )}

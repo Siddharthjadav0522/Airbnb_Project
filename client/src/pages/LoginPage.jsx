@@ -39,27 +39,27 @@ function LoginPage() {
 
     return (
         <>
-            <div className="md:min-h-[600px] min-h-[500px] flex items-center justify-center p-4">
-                <div className="w-full max-w-md bg-white p-6 shadow-lg rounded-lg">
-                    <h1 className="text-3xl font-bold text-center mb-6 text-gray-700">Login</h1>
+            <div className="md:min-h-[630px] min-h-[638px] flex items-center justify-center md:p-4">
+                <div className="w-full max-w-md bg-white md:p-6 p-3 shadow-lg rounded-lg">
+                    <h1 className="text-3xl font-bold text-center md:mb-9 mb-8 text-gray-700">Login</h1>
 
-                    <form className="space-y-4" onSubmit={handleLogin}>
+                    <form className="" onSubmit={handleLogin}>
                         <input
-                            className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring focus:ring-blue-300"
+                            className="w-full border border-gray-400 rounded-md py-2 px-4 focus:outline-none focus:ring focus:ring-blue-300 mb-4"
                             type="email"
                             placeholder="your@gmail.com"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                         />
                         <input
-                            className="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring focus:ring-blue-300"
+                            className="w-full border border-gray-400 rounded-md py-2 px-4 focus:outline-none focus:ring focus:ring-blue-300"
                             type="password"
                             placeholder="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />
                         <button
-                            className="w-full bg-rose-500 hover:bg-rose-600 text-white font-bold py-2 px-4 rounded-lg transition-all"
+                            className="w-full mt-8 bg-rose-500 hover:bg-rose-600 text-white font-bold py-2 px-4 rounded-lg transition-all"
                             type="submit"
                         >
                             Login

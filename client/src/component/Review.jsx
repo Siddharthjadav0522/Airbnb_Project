@@ -152,7 +152,10 @@ function Review({ place }) {
                                     <div key={review._id} className='shadow-md flex flex-col justify-between py-2 px-3'>
                                         <div>
                                             <h2 className='text-lg'>{review.author.name}</h2>
-                                            <p>{review.createdAt}</p>
+                                            <p>{new Date(review.createdAt).toLocaleDateString("en-US", {
+                                                year: "numeric",
+                                                month: "long",
+                                                day: "numeric"},)}</p>
                                             <p className="starability-result my-1" data-rating={review.rating}></p>
                                             <p className='h-20 overflow-hidden text-ellipsis mt-3 mb-1 text-sm'>{review.comment}</p>
                                         </div>

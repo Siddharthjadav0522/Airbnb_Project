@@ -25,19 +25,6 @@ function PlacePage() {
             });
     }, [id]);
 
-    // useEffect(() => {
-    //     axios.get(`/place/${place._id}/reviews`)
-    //         .then((res) => {
-    //             setReviews(res.data.reviews);
-    //             // console.log(response.data.reviews);
-    //         })
-    //         .catch((error) => {
-    //             console.error(error);
-    //         })
-    // }, []);
-
-
-
     if (!place) {
         return (
             <div className="mt-8 text-center">
@@ -45,8 +32,6 @@ function PlacePage() {
             </div>
         );
     };
-
-
 
     return (
         <div className='mt-8 py-4 md:px-2 lg:px-8 bg-gray-100 bg-opacity-80'>
@@ -74,24 +59,7 @@ function PlacePage() {
                 <p className='text-gray-700'>{place.extraInfo}</p>
             </div>
 
-            {/* rating */}
             <Review place={place} />
-
-            {/* <div className="mt-8">
-                <h2 className="text-xl font-semibold mb-4">Reviews</h2>
-                {reviews.length > 0 ? (
-                    reviews.map((review) => (
-                        <div key={review._id} className=''>
-                            <p>{review.author.name}</p>
-                            <p className="starability-result" data-rating={review.rating}></p>
-
-                        </div>
-                    ))
-                ) : (
-                    <p className="text-gray-500">No reviews yet.</p>
-                )}
-            </div> */}
-
 
         </div>
     );
