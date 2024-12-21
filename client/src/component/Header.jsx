@@ -20,11 +20,11 @@ function Header() {
     }
 
     return (
-        <header className='flex justify-between items-center flex-wrap'>
+        <header className='flex justify-between items-center flex-wrap py-4 px-4 md:px-9 xl:px-20'>
 
             <Link to='/' className='logo gap-1 flex text-primary items-center'>
                 <i className="fa-brands fa-airbnb text-4xl"></i>
-                <span className='font-bold text-xl'>airbnb</span>
+                <span className='font-bold text-xl hidden xl:block'>airbnb</span>
             </Link>
 
             <div className='gap-3 items-center border border-gray-300 rounded-full py-2 px-3 shadow-md shadow-gray-200 md:flex hidden'>

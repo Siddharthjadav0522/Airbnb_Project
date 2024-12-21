@@ -70,7 +70,7 @@ function Review({ place }) {
     }
 
     return (
-        <div className="bg-white md:p-3 p-2">
+        <div className="bg-white md:p-3 p-2 border-t">
             <div className="mt-1">
                 <label htmlFor="customRange" className="form-label text-lg font-medium">Rating</label>
                 <fieldset className="starability-slot">

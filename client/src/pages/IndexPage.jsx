@@ -51,14 +51,14 @@ function IndexPage() {
 
 
   return (
-    <div className="mt-8 mb-4">
+    <div className="mt-8 mb-4 px-4 md:px-9 xl:px-20">
       {loading ? (
         <div className="flex justify-center items-center h-[70vh]">
           <p className="text-lg text-gray-500">Loading places...</p>
         </div>
       ) : (
         <>
-          <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid md:gap-6 gap-10 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {!loading && places.length === 0 && (
               <p className="text-lg text-gray-500 text-center col-span-full">
                 No places found.
@@ -95,10 +95,11 @@ function IndexPage() {
 
           </div>
           {limit > places.length || limit === places.length &&
-            <div className='flex justify-center items-center mt-10'>
+            <div className='flex justify-center flex-col items-center mt-10'>
+              <p className='mb-4 font-medium text-lg'>Continue exploring castles</p>
               <button
                 onClick={showMoreListing}
-                className="py-2 px-4 bg-rose-600 hover:bg-rose-700 text-white rounded-md transition-all"
+                className="py-3 px-4 bg-black text-white rounded-md transition-all"
               >
                 Show more
               </button>

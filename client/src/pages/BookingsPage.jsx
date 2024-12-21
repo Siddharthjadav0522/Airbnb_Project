@@ -45,14 +45,14 @@ function BookingsPage() {
   return (
     <>
       <AccountNav />
-      <div className="flex flex-col items-center md:px-4 ">
+      <div className="flex flex-col items-center px-4 md:px-8 lg:px-14 md:min-h-96 min-h-80">
         {loading && <p className="text-lg text-gray-500">Loading bookings...</p>}
         {!loading && bookings.length === 0 && <p className="text-lg text-gray-500">No bookings found.</p>}
 
         {bookings?.length > 0 && bookings.map((booking) => (
           <div
             key={booking._id}
-            className="w-full max-w-5xl flex flex-col md:flex-row gap-5 bg-slate-100 rounded-xl p-4 mb-4 shadow-md"
+            className="w-full max-w-5xl flex flex-col md:flex-row gap-5 rounded-xl p-4 mb-4 shadow-md"
           >
 
             <Link to={`/account/bookings/${booking._id}`} className="w-full md:w-48 h-40 md:h-auto">

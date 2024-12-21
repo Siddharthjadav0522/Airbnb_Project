@@ -34,33 +34,34 @@ function PlacePage() {
     };
 
     return (
-        <div className='mt-8 py-4 md:px-2 lg:px-8 bg-gray-100 bg-opacity-80'>
-            <h1 className='text-2xl font-medium'>{place.title}</h1>
+        <div className=' flex justify-center items-center'>
+            <div className='max-w-6xl mt-8 px-4 py-4 md:px-10'>
+                <h1 className='text-2xl font-medium'>{place.title}</h1>
 
-            <AddressLink place={place} />
+                <AddressLink place={place} />
 
-            <PlaceGallery place={place} />
+                <PlaceGallery place={place} />
 
-            <div className='my-8 grid gap-6 md:gap-10 grid-cols-1 md:grid-cols-[2fr_1fr]'>
-                <div>
-                    <div className='mb-3'>
-                        <h2 className='text-xl font-semibold mb-1'>Description</h2>
-                        <p>{place.description}</p>
+                <div className='my-8 grid gap-6 md:gap-10 grid-cols-1 md:grid-cols-[2fr_1fr]'>
+                    <div>
+                        <div className='mb-3'>
+                            <h2 className='text-xl font-semibold mb-1'>Description</h2>
+                            <p>{place.description}</p>
+                        </div>
+                        <p>Check-in: {place.checkIn}</p>
+                        <p>Check-out: {place.checkOut}</p>
+                        <p>Max number of guests: {place.maxGuests}</p>
                     </div>
-                    <p>Check-in: {place.checkIn}</p>
-                    <p>Check-out: {place.checkOut}</p>
-                    <p>Max number of guests: {place.maxGuests}</p>
+                    <BookingWidget place={place} />
                 </div>
-                <BookingWidget place={place} />
+
+                <div className='mb-3 p-2 md:p-4 bg-white border-t'>
+                    <h2 className='text-xl font-semibold'>Extra Info</h2>
+                    <p className='text-gray-700'>{place.extraInfo}</p>
+                </div>
+
+                <Review place={place} />
             </div>
-
-            <div className='mb-3 p-2 md:p-4 bg-white border-t'>
-                <h2 className='text-xl font-semibold'>Extra Info</h2>
-                <p className='text-gray-700'>{place.extraInfo}</p>
-            </div>
-
-            <Review place={place} />
-
         </div>
     );
 }

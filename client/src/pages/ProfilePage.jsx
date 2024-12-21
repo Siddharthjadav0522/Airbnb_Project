@@ -36,9 +36,9 @@ function ProfilePage() {
     }
 
     return (
-        <div className="min-h-96 flex flex-col">
+        <div className="flex flex-col">
             <AccountNav />
-            <div className="flex flex-grow items-center justify-center">
+            <div className="flex flex-grow items-center justify-center md:min-h-96 min-h-80">
                 {subpage === 'profile' && (
                     <div className="text-center max-w-lg mx-auto p-4">
                         <div className="mb-8">

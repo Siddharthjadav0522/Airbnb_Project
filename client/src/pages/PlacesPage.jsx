@@ -53,21 +53,22 @@ function PlacesPage() {
 
             {loading ? (<p className="text-md text-gray-500 text-center">Loading places...</p>) : (
                 <>
-                    {places.length === 0 && (
-                        <p className="text-lg text-gray-500 text-center my-20">No places found.</p>
-                    )}
-                    <div className="mt-4 flex flex-col justify-center items-center ">
+
+                    <div className="mt-4 flex flex-col gap-8 md:gap-6 items-center px-4 md:px-8 lg:px-14 md:min-h-96 min-h-80">
+                        {places.length === 0 && (
+                            <p className="text-lg text-gray-500 text-center">No places found.</p>
+                        )}
                         {places.map((place) => (
                             <div
                                 key={place._id}
-                                className="w-full max-w-5xl flex flex-wrap gap-4 bg-slate-100 shadow-md p-3 rounded-2xl mb-5"
+                                className="w-full max-w-5xl flex flex-wrap gap-4 shadow-md p-3 rounded-2xl"
                             >
                                 <Link to={'/account/places/' + place._id} className="w-full md:w-48 h-40 md:h-32 bg-gray-300 hover:brightness-90 rounded-lg overflow-hidden">
                                     <PlaceImg place={place} />
                                 </Link>
                                 <Link to={'/account/places/' + place._id} className="md:flex-1">
                                     <h2 className="text-md md:text-lg font-medium">{place.title}</h2>
-                                    <p className="mt-2 md:text-md line-clamp-2">{place.description}</p>
+                                    <p className="mt-2 md:text-md line-clamp-4 md:line-clamp-2">{place.description}</p>
                                 </Link>
                                 <div className='flex w-full md:w-auto md:justify-center items-end'>
                                     <button
