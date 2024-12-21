@@ -52,7 +52,7 @@ const register = async (req, res) => {
         }
 
         if (otpStore.email.otp !== otp || (Date.now() - otpStore.email.time >= 60000)) {
-            return res.json({ message: "email verification fail" });
+            return res.json({ message: "Please Enter valid OTP" });
         };
 
         delete otpStore.email;

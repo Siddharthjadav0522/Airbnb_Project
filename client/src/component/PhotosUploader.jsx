@@ -1,6 +1,7 @@
 import axios from 'axios';
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { ToastContainer } from "react-toastify";
+import { handleError, handleSuccess } from "../utils";
 
 function PhotosUploader({ addedPhotos, onChange }) {
     const [photoLink, setPhotoLink] = useState('');
@@ -8,6 +9,9 @@ function PhotosUploader({ addedPhotos, onChange }) {
     const addPhotoByLink = async (e) => {
         e.preventDefault();
         try {
+            if (!photoLink) {
+                return handleError("Please enter a photo link");
+            }
             const { data } = await axios.post('/upload-by-link', { link: photoLink });
             onChange([...addedPhotos, data.filename]);
             setPhotoLink('');
@@ -38,25 +42,25 @@ function PhotosUploader({ addedPhotos, onChange }) {
         onChange([...addedPhotos.filter((photo) => photo !== filename)]);
     };
     const selectAsMainPhoto = (filename) => {
-        onChange([filename,...addedPhotos.filter((photo) => photo !== filename)]);
+        onChange([filename, ...addedPhotos.filter((photo) => photo !== filename)]);
     };
 
     return (
         <>
-            <div className="flex gap-2">
+            <div className="flex flex-wrap md:flex-nowrap gap-2 items-center">
                 <input
                     value={photoLink}
                     onChange={(e) => setPhotoLink(e.target.value)}
-                    className="w-full border border-gray-400 rounded-2xl py-2 px-3 my-1"
+                    className="w-full border border-gray-400 rounded-lg py-2 px-3 my-1 focus:outline-none focus:ring focus:ring-blue-300"
                     type="text"
                     placeholder="Add using a link ....jpg"
                 />
-                <button onClick={addPhotoByLink} className="bg-gray-200 grow p-4 rounded-2xl">
+                <button onClick={addPhotoByLink} className="bg-rose-500 h-11 text-white hover:bg-rose-600 grow px-4 rounded-lg py-2">
                     Add&nbsp;photo
                 </button>
             </div>
 
-            <div className="mt-3 grid gap-2 grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+            <div className="mt-3 grid gap-2 grid-cols-2 md:grid-cols-4 lg:grid-cols-6">
                 {addedPhotos.length > 0 &&
                     addedPhotos.map((link, index) => (
                         <div key={index} className="h-32 flex relative">
@@ -67,27 +71,29 @@ function PhotosUploader({ addedPhotos, onChange }) {
                                 alt="Uploaded" />
                             <button type='button'
                                 onClick={() => removePhoto(link)}
-                                className="cursor-pointer absolute bottom-1 right-1 rounded-2xl text-white bg-black bg-opacity-50 py-2 px-3">
-                                <i className="fa-regular fa-trash-can"></i>
+                                className="cursor-pointer absolute bottom-1 right-1 rounded-2xl text-white bg-black bg-opacity-50 text-md md:text-lg ">
+                                <i className="fa-regular fa-trash-can py-2 px-3"></i>
                             </button>
                             <button type='button'
                                 onClick={() => selectAsMainPhoto(link)}
-                                className="cursor-pointer absolute bottom-1 left-1 rounded-2xl text-white bg-black bg-opacity-50 py-2 px-3">
+                                className="cursor-pointer absolute bottom-1 left-1 rounded-2xl text-white bg-black bg-opacity-50 text-md md:text-lg">
                                 {link === addedPhotos[0] && (
-                                    <i className="fa-solid fa-star"></i>
+                                    <i className="fa-solid fa-star py-2 px-3"></i>
                                 )}
                                 {link !== addedPhotos[0] && (
-                                    <i className="fa-regular fa-star"></i>
+                                    <i className="fa-regular fa-star py-2 px-3"></i>
                                 )}
                             </button>
                         </div>
                     ))}
 
-                <label className="border flex items-center justify-center bg-transparent rounded-2xl py-4 px-2 text-2xl text-gray-600">
+                <label className="border flex items-center flex-col justify-center bg-transparent rounded-2xl h-32 py-2 px-2 text-2xl text-gray-600">
                     <input type="file" className="hidden" onChange={uploadPhoto} />
-                    <i className="fa-solid fa-cloud-arrow-up"></i>&nbsp;Upload
+                    <i className="fa-solid fa-cloud-arrow-up"></i>
+                    <span className=''>Upload</span>
                 </label>
             </div>
+            <ToastContainer/>
         </>
     );
 }

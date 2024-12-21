@@ -39,19 +39,25 @@ const updetePlace = async (req, res) => {
             description, perks, extraInfo,
             checkIn, checkOut, maxGuests
         }, { new: true });
-        res.status(200).json({ message: 'Place updated successfully',success: true , updatePlace });
+        res.status(200).json({ message: 'Place updated successfully', success: true, updatePlace });
     } catch (err) {
         console.error(err.message);
-        res.status(500).json({ message: 'Server error' ,success: false });
+        res.status(500).json({ message: 'Server error', success: false });
     }
 };
 
 const getPlace = async (req, res) => {
     try {
-        allPlace = await Place.find();
+        // const page = Number(req.query.page) || 1;
+        const dataLimit = Number(req.query.limit) || 4;
+        // const skipCount = (page - 1) * dataLimit;
+        const totalData = await Place.countDocuments();
+        // const totalPages = Math.ceil(totalData / dataLimit);
+
+        let allPlace = await Place.find().limit(dataLimit);
         res.json(allPlace);
     } catch (err) {
-        console.log(err.message)
+        console.log(err.message);
     }
 };
 
@@ -113,4 +119,4 @@ const placeDelete = async (req, res) => {
     }
 }
 
-module.exports = { createPlace, updetePlace, getPlace, getOnePlace, userCreatedPlace, uploadLink, uploadImage ,placeDelete };
+module.exports = { createPlace, updetePlace, getPlace, getOnePlace, userCreatedPlace, uploadLink, uploadImage, placeDelete };

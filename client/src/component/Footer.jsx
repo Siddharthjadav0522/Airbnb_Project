@@ -52,7 +52,7 @@ function Footer() {
                     <a href="#" className="hover:underline ml-2">Sitemap</a>
                 </div>
 
-                <div className="flex gap-4 items-center text-xl ">
+                <div className="flex gap-4 items-center md:text-xl text-2xl ">
                     <a href="https://www.facebook.com/AirbnbIndia"><i className="fa-brands fa-facebook cursor-pointer"></i></a>
                     <a href="https://x.com/i/flow/login?redirect_after_login=%2Fairbnb_in"><i className="fa-brands fa-square-x-twitter cursor-pointer"></i></a>
                     <a href="https://www.instagram.com/airbnb/"><i className="fa-brands fa-square-instagram cursor-pointer"></i></a>

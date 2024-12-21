@@ -46,7 +46,7 @@ function Header() {
                     <div className='bg-gray-500 text-white rounded-full w-7 h-7 md:w-8 md:h-8 flex items-center justify-center'>
                         <i className="fa-solid fa-user fa-sm"></i>
                     </div>
-                    {user && <div>{user.name}</div>}
+                    {user && <div className='capitalize font-semibold'>{user.name}</div>}
                 </button>
 
                 {menu && (
